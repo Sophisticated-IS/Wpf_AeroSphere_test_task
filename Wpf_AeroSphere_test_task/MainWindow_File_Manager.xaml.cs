@@ -29,9 +29,7 @@ namespace Wpf_AeroSphere_test_task
             InitializeComponent();
             
             txt_box_Path.Text = "💻MyComputer";
-            volumes  = new Drives_list(list_view_disks);//экземпляр нашей файловой системы
-            var drives = volumes.AllDrives;            
-                                   
+            volumes  = new Drives_list(list_view_disks);//экземпляр нашей файловой системы                            
         }
 
         private void List_view_disks_MouseDoubleClick(object sender, MouseButtonEventArgs e)

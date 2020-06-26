@@ -51,10 +51,10 @@ namespace Wpf_AeroSphere_test_task
             is_disk_choosen = true;
             data_grid_meta_data.Items.Clear();
             data_grid_meta_data.Visibility = Visibility.Collapsed;
-            currentDirName = list_volumes.SelectedItem.ToString();
+            currentDirName = list_volumes.SelectedItem.GetType().GetProperty("Name").GetValue(list_volumes.SelectedItem,null).ToString();
             txt_box_Path.Text = $"{default_root_dir} {divide_symbol} {currentDirName}";
             Switch_btw_files_and_disks_listviews(list_view_disks, list_view_files);
-            list_view_files.ItemsSource = GetAllFiles();
+            list_view_files.ItemsSource = (from filepath in GetAllFiles() select Path.GetFileName(filepath)).ToList();
         }
 
         public void Return_to_disk_choosing(ListView list_view_disks, ListView list_view_files, TextBox txt_box_Path, DataGrid data_grid_meta_data)//возврат к каталогу со всеми дисками
@@ -65,12 +65,11 @@ namespace Wpf_AeroSphere_test_task
                 data_grid_meta_data.Visibility = Visibility.Visible;
                 txt_box_Path.Text = default_root_dir;
                 Switch_btw_files_and_disks_listviews(list_view_disks, list_view_files);
-                list_view_disks.ItemsSource = AllDrives;
             }
             else;//мы итак в директории выборе диска находимся
         }
 
-        public IEnumerable<string> GetAllFiles()
+        public string[] GetAllFiles()
         {
             return Directory.GetFiles(currentDirName);
         }
