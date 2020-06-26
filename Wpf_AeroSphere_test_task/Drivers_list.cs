@@ -13,10 +13,20 @@ namespace Wpf_AeroSphere_test_task
         public Drivers_list()
         {
             AllDrivers = Get_all_drives();
-            CurrentDirName = AllDrivers[0].Name;
-            Directory.SetCurrentDirectory(CurrentDirName);
         }
-        public string CurrentDirName { get;}
+        private string currentDirName;
+        public string CurrentDirName
+        {
+            get
+            {
+                return currentDirName;
+            }
+            set
+            {
+                currentDirName = value;
+                Directory.SetCurrentDirectory(currentDirName);
+            }
+        }
         public DriveInfo[] AllDrivers { get; }
 
         public void Move_dir_up()
@@ -29,10 +39,14 @@ namespace Wpf_AeroSphere_test_task
             throw new NotImplementedException();
         }
 
+        public string[] GetAllFiles()
+        {
+            return Directory.GetFiles(CurrentDirName);
+        }
         private DriveInfo[] Get_all_drives()
         {
-            DriveInfo[] allDrives = DriveInfo.GetDrives();           
-            
+            DriveInfo[] allDrives = DriveInfo.GetDrives();
+
             if (allDrives.Length > 0)
             {
                 return allDrives;
@@ -40,7 +54,7 @@ namespace Wpf_AeroSphere_test_task
             else
             {
                 throw new Exception("На данном устройстве нет доступных драйверов!!!");
-            }            
+            }
         }
     }
 }

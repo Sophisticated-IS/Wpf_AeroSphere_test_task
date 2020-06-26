@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Wpf_AeroSphere_test_task"
         mc:Ignorable="d"
-        Title="File Manager" Height="450" Width="800">
+        Title="File Manager AeroSphere" Height="450" Width="800">
 
     <Window.Resources>
         <Style x:Key="BigFont_TextBlock_Style">
@@ -38,10 +38,9 @@
                     <Button Margin="5,0,0,0" Style="{StaticResource Button_Arrows_Style}">
                         🡆
                     </Button>
-                    <!--<Border BorderThickness="3" BorderBrush="#7F70D8"/>-->
                 </StackPanel>
 
-                <TextBox  DockPanel.Dock="Right" HorizontalAlignment="Right" Width="120" Margin="1">Search: 🔎</TextBox>
+                <TextBox  DockPanel.Dock="Right" HorizontalAlignment="Right" Width="150" Margin="2">Search: 🔎</TextBox>
 
                 <Grid Margin="5,0,5,0">
                     <Grid.ColumnDefinitions>
@@ -67,7 +66,7 @@
                     </Grid>
 
                     <Grid Grid.Column="1">
-                        <TextBox HorizontalAlignment="Stretch" Style="{StaticResource BigFont_TextBlock_Style}" IsReadOnly="True">C:\Docs\PhpStorm</TextBox>
+                        <TextBox HorizontalAlignment="Stretch" Style="{StaticResource BigFont_TextBlock_Style}" IsReadOnly="True">💻MyComputer</TextBox>
                     </Grid>
                 </Grid>
 
@@ -82,13 +81,14 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Grid Grid.Column="0" Background="Bisque">
-                <ListView Name="list_view_files">
+            <Grid Grid.Column="0" >
+                <ListView Name="list_view_files"  SelectionMode="Single" MouseDoubleClick="List_view_files_MouseDoubleClick"  
+                                                   Background="Bisque" MouseLeftButtonUp="list_view_files_MouseLeftButtonUp">
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Vertical" Margin="5">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding VolumeLabel}"/>
+                                    <TextBlock Text="{Binding VolumeLabel}" Margin="0,0,5,0"/>
                                     <TextBlock Text="{Binding Name,Mode=OneWay}"/>
                                 </StackPanel>
                                 <ProgressBar HorizontalAlignment="Right"  Background="Green" Foreground="White"  Height="10" Width="80"  Minimum="0" Maximum="{Binding TotalSize,Mode=OneWay}" 
@@ -102,7 +102,7 @@
                                         </TransformGroup>
                                     </ProgressBar.RenderTransform>
                                 </ProgressBar>
-                                <TextBlock Text="{Binding AvailableFreeSpace,Mode=OneWay}"></TextBlock>
+                            
                             </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
@@ -112,7 +112,15 @@
             <GridSplitter Grid.Column="1" ShowsPreview="False" Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="#A66800"/>
 
             <Grid Grid.Column="2" Background="Gray">
+                <DataGrid x:Name="data_grid_meta_data">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header= "Name" Binding="{Binding Name }" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Value" Binding="{Binding Value}" IsReadOnly="True"/>
 
+                        
+                    </DataGrid.Columns>
+                    
+                </DataGrid>
             </Grid>
         </Grid>
     </Grid>
