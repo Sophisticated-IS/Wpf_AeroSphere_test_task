@@ -23,6 +23,8 @@ namespace Wpf_AeroSphere_test_task
         public MainWindow()
         {
             InitializeComponent();
+            FileDirectory fd = new FileDirectory();
+          
         }
     }
 }
