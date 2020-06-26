@@ -8,13 +8,16 @@ using System.Threading.Tasks;
 
 namespace Wpf_AeroSphere_test_task
 {
-    class FileDirectory : IDirChangeable
+    class Drivers_list : IDirChangeable
     {
-        public FileDirectory()
+        public Drivers_list()
         {
-            CurrentDir = Set_default_dir();
+            AllDrivers = Get_all_drives();
+            CurrentDirName = AllDrivers[0].Name;
+            Directory.SetCurrentDirectory(CurrentDirName);
         }
-        public string CurrentDir { get;}        
+        public string CurrentDirName { get;}
+        public DriveInfo[] AllDrivers { get; }
 
         public void Move_dir_up()
         {
@@ -26,22 +29,18 @@ namespace Wpf_AeroSphere_test_task
             throw new NotImplementedException();
         }
 
-        public DriveInfo[] Get_disks_list()
+        private DriveInfo[] Get_all_drives()
         {
-           return DriveInfo.GetDrives();
-        }
-        private string Set_default_dir()//устанавливает первый драйвер по умолчанию
-        {
-            DriveInfo[] allDrives = DriveInfo.GetDrives();
+            DriveInfo[] allDrives = DriveInfo.GetDrives();           
+            
             if (allDrives.Length > 0)
             {
-                return allDrives[0].Name;
+                return allDrives;
             }
             else
             {
                 throw new Exception("На данном устройстве нет доступных драйверов!!!");
-            }
-            
+            }            
         }
     }
 }

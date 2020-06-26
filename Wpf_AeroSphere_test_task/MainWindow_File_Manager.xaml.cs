@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,8 +24,16 @@ namespace Wpf_AeroSphere_test_task
         public MainWindow()
         {
             InitializeComponent();
-            FileDirectory fd = new FileDirectory();
-          
+
+            var a = new Drivers_list();
+            
+            foreach (var disk in a.AllDrivers)
+            {
+                Debug.WriteLine(disk.Name);                
+            }
+            list_view_files.ItemsSource = a.AllDrivers;
         }
+
+
     }
 }

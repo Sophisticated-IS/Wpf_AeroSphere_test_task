@@ -13,5 +13,13 @@ namespace Wpf_AeroSphere_test_task
     /// </summary>
     public partial class App : Application
     {
+
+    }
+
+    public class Volumes_list
+    {
+        public string VolumeName { get; set; }
+        public int MyProperty { get; set; }
+        public int TotalSize { get; set; }
     }
 }

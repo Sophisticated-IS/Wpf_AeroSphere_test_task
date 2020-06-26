@@ -41,7 +41,7 @@
                     <!--<Border BorderThickness="3" BorderBrush="#7F70D8"/>-->
                 </StackPanel>
 
-                <TextBox  DockPanel.Dock="Right" HorizontalAlignment="Right" Width="120">Search: 🔎</TextBox>
+                <TextBox  DockPanel.Dock="Right" HorizontalAlignment="Right" Width="120" Margin="1">Search: 🔎</TextBox>
 
                 <Grid Margin="5,0,5,0">
                     <Grid.ColumnDefinitions>
@@ -83,13 +83,36 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0" Background="Bisque">
-                
+                <ListView Name="list_view_files">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding VolumeLabel}"/>
+                                    <TextBlock Text="{Binding Name,Mode=OneWay}"/>
+                                </StackPanel>
+                                <ProgressBar HorizontalAlignment="Right"  Background="Green" Foreground="White"  Height="10" Width="80"  Minimum="0" Maximum="{Binding TotalSize,Mode=OneWay}" 
+                                             Value="{Binding AvailableFreeSpace,Mode=OneWay}" RenderTransformOrigin="0.5,0.5">
+                                    <ProgressBar.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform/>
+                                            <SkewTransform/>
+                                            <RotateTransform Angle="180"/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </ProgressBar.RenderTransform>
+                                </ProgressBar>
+                                <TextBlock Text="{Binding AvailableFreeSpace,Mode=OneWay}"></TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </Grid>
-                  
+
             <GridSplitter Grid.Column="1" ShowsPreview="False" Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="#A66800"/>
 
             <Grid Grid.Column="2" Background="Gray">
-                
+
             </Grid>
         </Grid>
     </Grid>
