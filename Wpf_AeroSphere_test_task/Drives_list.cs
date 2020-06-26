@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace Wpf_AeroSphere_test_task
 {
-    class Drivers_list : IDirChangeable
+    class Drives_list : IDirChangeable
     {
-        public Drivers_list()
+        public Drives_list()
         {
-            AllDrivers = Get_all_drives();
+            AllDrives = Get_all_drives();
         }
-        private string currentDirName;
+        private string currentDirName;//имя текущей директории
         public string CurrentDirName
         {
             get
@@ -27,7 +27,7 @@ namespace Wpf_AeroSphere_test_task
                 Directory.SetCurrentDirectory(currentDirName);
             }
         }
-        public DriveInfo[] AllDrivers { get; }
+        public DriveInfo[] AllDrives { get; }
 
         public void Move_dir_up()
         {
@@ -41,15 +41,15 @@ namespace Wpf_AeroSphere_test_task
 
         public string[] GetAllFiles()
         {
-            return Directory.GetFiles(CurrentDirName);
+            return Directory.GetDirectories(currentDirName); 
         }
         private DriveInfo[] Get_all_drives()
         {
-            DriveInfo[] allDrives = DriveInfo.GetDrives();
+            DriveInfo[] AllDrives = DriveInfo.GetDrives();
 
-            if (allDrives.Length > 0)
+            if (AllDrives.Length > 0)
             {
-                return allDrives;
+                return AllDrives;
             }
             else
             {

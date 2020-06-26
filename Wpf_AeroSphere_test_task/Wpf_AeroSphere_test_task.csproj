@@ -66,7 +66,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Drivers_list.cs" />
+    <Compile Include="Drives_list.cs" />
     <Compile Include="IDirChangeable.cs" />
     <Compile Include="MainWindow_File_Manager.xaml.cs">
       <DependentUpon>MainWindow_File_Manager.xaml</DependentUpon>
