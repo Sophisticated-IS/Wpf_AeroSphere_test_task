@@ -34,35 +34,43 @@ namespace Wpf_AeroSphere_test_task
             txt_box_Path.Text = "💻MyComputer";
            
             var drives = volumes.AllDrives;
-            Hardware_ico_and_info[] img_and_info = new Hardware_ico_and_info[drives.Length];
-
-            for (int i = 0; i < drives.Length; i++)
+            
+            Hardware_ico_and_info img_and_info;
+            for (int i = 0; i < drives.Length; i++)//Добавим по картинке к каждому устройству
             {
-                img_and_info[i].drive_info = drives[i];
+                img_and_info.drive_info = drives[i];
                 
                 switch (drives[i].DriveType)
                 {
                     case DriveType.Fixed: 
-                        img_and_info[i].hardware_ico = Convert_images.Convert_to_ImageSource(Properties.Resources.hp_hdd.ToBitmap());
+                        img_and_info.hardware_ico = Convert_images.Convert_to_ImageSource(Properties.Resources.hp_hdd.ToBitmap());
                         break;
 
                     case DriveType.Removable:
-                        img_and_info[i].hardware_ico = Convert_images.Convert_to_ImageSource(Properties.Resources.hp_flash_drive.ToBitmap());
+                        img_and_info.hardware_ico = Convert_images.Convert_to_ImageSource(Properties.Resources.hp_flash_drive.ToBitmap());
                         break;
                     default:
-                        img_and_info[i].hardware_ico = Convert_images.Convert_to_ImageSource(Properties.Resources.question_shield.ToBitmap());
+                        img_and_info.hardware_ico = Convert_images.Convert_to_ImageSource(Properties.Resources.question_shield.ToBitmap());
                         break;
                 }
-                if (img_and_info[i].drive_info.IsReady)
+                if (img_and_info.drive_info.IsReady)
                 {
-                    list_view_disks.Items.Add(new { VolumeLabel = img_and_info[i].drive_info.VolumeLabel, Name = img_and_info[i].drive_info.Name, AvailableFreeSpace = img_and_info[i].drive_info.AvailableFreeSpace, TotalSize = img_and_info[i].drive_info.TotalSize, Img = img_and_info[i].hardware_ico });
+                    list_view_disks.Items.Add(new 
+                    { VolumeLabel = img_and_info.drive_info.VolumeLabel, Name = img_and_info.drive_info.Name, 
+                        AvailableFreeSpace = img_and_info.drive_info.AvailableFreeSpace, TotalSize = img_and_info.drive_info.TotalSize,
+                        Img = img_and_info.hardware_ico 
+                    });
+                }
+                else
+                {
+                    list_view_disks.Items.Add(new {
+                       VolumeLabel = "Uknown",
+                        Name = img_and_info.drive_info.Name,
+                        Img = img_and_info.hardware_ico
+                    });
                 }
                 
-            }
-                
-            
-          
-            //list_view_disks.ItemsSource = img_and_info;                
+            }                             
         }
 
         private void List_view_disks_MouseDoubleClick(object sender, MouseButtonEventArgs e)
