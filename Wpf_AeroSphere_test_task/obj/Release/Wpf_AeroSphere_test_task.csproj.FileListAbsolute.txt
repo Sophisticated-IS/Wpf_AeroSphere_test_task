@@ -1,0 +1,14 @@
+C:\Users\Sova IS\source\repos\Wpf_AeroSphere_test_task\Wpf_AeroSphere_test_task\bin\Release\Wpf_AeroSphere_test_task.exe.config
+C:\Users\Sova IS\source\repos\Wpf_AeroSphere_test_task\Wpf_AeroSphere_test_task\bin\Release\Wpf_AeroSphere_test_task.exe
+C:\Users\Sova IS\source\repos\Wpf_AeroSphere_test_task\Wpf_AeroSphere_test_task\bin\Release\Wpf_AeroSphere_test_task.pdb
+C:\Users\Sova IS\source\repos\Wpf_AeroSphere_test_task\Wpf_AeroSphere_test_task\obj\Release\Wpf_AeroSphere_test_task.csprojAssemblyReference.cache
+C:\Users\Sova IS\source\repos\Wpf_AeroSphere_test_task\Wpf_AeroSphere_test_task\obj\Release\MainWindow_File_Manager.g.cs
+C:\Users\Sova IS\source\repos\Wpf_AeroSphere_test_task\Wpf_AeroSphere_test_task\obj\Release\App.g.cs
+C:\Users\Sova IS\source\repos\Wpf_AeroSphere_test_task\Wpf_AeroSphere_test_task\obj\Release\Wpf_AeroSphere_test_task_MarkupCompile.cache
+C:\Users\Sova IS\source\repos\Wpf_AeroSphere_test_task\Wpf_AeroSphere_test_task\obj\Release\Wpf_AeroSphere_test_task_MarkupCompile.lref
+C:\Users\Sova IS\source\repos\Wpf_AeroSphere_test_task\Wpf_AeroSphere_test_task\obj\Release\MainWindow_File_Manager.baml
+C:\Users\Sova IS\source\repos\Wpf_AeroSphere_test_task\Wpf_AeroSphere_test_task\obj\Release\Wpf_AeroSphere_test_task.g.resources
+C:\Users\Sova IS\source\repos\Wpf_AeroSphere_test_task\Wpf_AeroSphere_test_task\obj\Release\Wpf_AeroSphere_test_task.Properties.Resources.resources
+C:\Users\Sova IS\source\repos\Wpf_AeroSphere_test_task\Wpf_AeroSphere_test_task\obj\Release\Wpf_AeroSphere_test_task.csproj.GenerateResource.cache
+C:\Users\Sova IS\source\repos\Wpf_AeroSphere_test_task\Wpf_AeroSphere_test_task\obj\Release\Wpf_AeroSphere_test_task.exe
+C:\Users\Sova IS\source\repos\Wpf_AeroSphere_test_task\Wpf_AeroSphere_test_task\obj\Release\Wpf_AeroSphere_test_task.pdb
