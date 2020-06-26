@@ -31,7 +31,7 @@
         <Grid Grid.Row="0" Background="#FFFFDBA1">
             <DockPanel LastChildFill="True">
                 <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
-                    <Button Style="{StaticResource Button_Arrows_Style}">
+                    <Button Style="{StaticResource Button_Arrows_Style}" Click="Left_arrow_Button_Click">
                         🡄
                     </Button>
                     <Button Margin="5,0,0,0" Style="{StaticResource Button_Arrows_Style}">
@@ -87,6 +87,7 @@
 
                                 <StackPanel Orientation="Vertical" Margin="5" >
                                     <StackPanel Orientation="Horizontal" >
+                                        <Image HorizontalAlignment="Left" MaxHeight="50" MaxWidth="50" Source="{Binding Img}"/>
                                         <TextBlock Text="{Binding VolumeLabel}" Style="{StaticResource BigFont_TextBlock_Style}" Margin="0,0,5,0"/>
                                         <TextBlock Text="{Binding Name,Mode=OneWay}" Style="{StaticResource BigFont_TextBlock_Style}" FontWeight="Light"/>
                                     </StackPanel>

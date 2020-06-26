@@ -40,6 +40,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -66,6 +67,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Convert_Images.cs" />
     <Compile Include="Drives_list.cs" />
     <Compile Include="IDirChangeable.cs" />
     <Compile Include="MainWindow_File_Manager.xaml.cs">
@@ -101,6 +103,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="file_manager.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\hp_flash_drive.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\hp_hdd.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\question_shield.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

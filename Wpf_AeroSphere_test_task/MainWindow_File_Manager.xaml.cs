@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,16 +22,48 @@ namespace Wpf_AeroSphere_test_task
     /// </summary>
     public partial class MainWindow : Window
     {
-        readonly Drives_list volumes = new Drives_list();
-
+        readonly Drives_list volumes = new Drives_list();//экземпляр нашей файловой системы
+        struct Hardware_ico_and_info
+        {
+           public ImageSource hardware_ico;// картинка носителя информации диска или флешки
+           public DriveInfo drive_info;//информация о носителе
+        }
         public MainWindow()
         {
             InitializeComponent();
             txt_box_Path.Text = "💻MyComputer";
-            list_view_disks.ItemsSource = volumes.AllDrives;
+           
+            var drives = volumes.AllDrives;
+            Hardware_ico_and_info[] img_and_info = new Hardware_ico_and_info[drives.Length];
+
+            for (int i = 0; i < drives.Length; i++)
+            {
+                img_and_info[i].drive_info = drives[i];
+                
+                switch (drives[i].DriveType)
+                {
+                    case DriveType.Fixed: 
+                        img_and_info[i].hardware_ico = Convert_images.Convert_to_ImageSource(Properties.Resources.hp_hdd.ToBitmap());
+                        break;
+
+                    case DriveType.Removable:
+                        img_and_info[i].hardware_ico = Convert_images.Convert_to_ImageSource(Properties.Resources.hp_flash_drive.ToBitmap());
+                        break;
+                    default:
+                        img_and_info[i].hardware_ico = Convert_images.Convert_to_ImageSource(Properties.Resources.question_shield.ToBitmap());
+                        break;
+                }
+                if (img_and_info[i].drive_info.IsReady)
+                {
+                    list_view_disks.Items.Add(new { VolumeLabel = img_and_info[i].drive_info.VolumeLabel, Name = img_and_info[i].drive_info.Name, AvailableFreeSpace = img_and_info[i].drive_info.AvailableFreeSpace, TotalSize = img_and_info[i].drive_info.TotalSize, Img = img_and_info[i].hardware_ico });
+                }
+                
+            }
+                
+            
+          
+            //list_view_disks.ItemsSource = img_and_info;                
         }
-
-
 
         private void List_view_disks_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -41,7 +74,7 @@ namespace Wpf_AeroSphere_test_task
                 {
                     if (volumes.AllDrives[list_volumes.SelectedIndex].IsReady)
                     {
-                        volumes.Move_dir_down(list_view_disks, list_view_files, list_volumes, txt_box_Path, data_grid_disks_meta_data);
+                        volumes.Choose_disk(list_view_disks, list_view_files, list_volumes, txt_box_Path, data_grid_disks_meta_data);
                     }
                     else
                     {
@@ -84,6 +117,11 @@ namespace Wpf_AeroSphere_test_task
                 
             }
             else;//элемент не выбран или его нет
+        }
+
+        private void Left_arrow_Button_Click(object sender, RoutedEventArgs e)
+        {
+            volumes.Return_to_disk_choosing(list_view_disks, list_view_files, txt_box_Path, data_grid_disks_meta_data);
         }
     }
 }
