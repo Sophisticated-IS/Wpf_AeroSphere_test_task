@@ -26,29 +26,10 @@ namespace Wpf_AeroSphere_test_task
         public MainWindow()
         {
             InitializeComponent();
-
-#if DEBUG
-            foreach (var disk in volumes.AllDrives)
-            {
-                Debug.WriteLine(disk.Name);
-            }
-#endif
+            txt_box_Path.Text = "💻MyComputer";
             list_view_disks.ItemsSource = volumes.AllDrives;
         }
-        private void Switch_btw_files_and_disks_listviews()
-        {
-            if (list_view_disks.Visibility == Visibility.Collapsed)
-            {
-                list_view_disks.Visibility = Visibility.Visible;
-                list_view_files.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                list_view_disks.Visibility = Visibility.Collapsed;
-                list_view_files.Visibility = Visibility.Visible;
-            }
-            
-        }
+
 
 
         private void List_view_disks_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -60,9 +41,7 @@ namespace Wpf_AeroSphere_test_task
                 {
                     if (volumes.AllDrives[list_volumes.SelectedIndex].IsReady)
                     {
-                        Switch_btw_files_and_disks_listviews();
-                        volumes.CurrentDirName = list_volumes.SelectedItem.ToString();
-                        list_view_files.ItemsSource = volumes.GetAllFiles();
+                        volumes.Move_dir_down(list_view_disks, list_view_files, list_volumes, txt_box_Path, data_grid_disks_meta_data);
                     }
                     else
                     {
@@ -94,6 +73,17 @@ namespace Wpf_AeroSphere_test_task
                     MessageBox.Show("Диск не готов к работе!");
                 }
             }
+        }
+
+        private void List_view_files_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var list_folders_and_files = (ListView)sender;
+
+            if (list_folders_and_files != null && list_folders_and_files.Items.Count > 0 && list_folders_and_files.SelectedIndex >= 0)
+            {
+                
+            }
+            else;//элемент не выбран или его нет
         }
     }
 }

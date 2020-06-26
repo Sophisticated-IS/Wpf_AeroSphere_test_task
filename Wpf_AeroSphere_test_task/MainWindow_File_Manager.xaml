@@ -65,7 +65,7 @@
                     </Grid>
 
                     <Grid Grid.Column="1">
-                        <TextBox HorizontalAlignment="Stretch" Style="{StaticResource BigFont_TextBlock_Style}" FontStyle="Italic" IsReadOnly="True">💻MyComputer</TextBox>
+                        <TextBox Name="txt_box_Path" HorizontalAlignment="Stretch" Style="{StaticResource BigFont_TextBlock_Style}" FontStyle="Italic" IsReadOnly="True">💻MyComputer</TextBox>
                     </Grid>
                 </Grid>
 
@@ -108,7 +108,7 @@
                 </GroupBox>
 
 
-                <ListView x:Name="list_view_files" Visibility="Collapsed" Background="Bisque" Style="{StaticResource BigFont_TextBlock_Style}"/>
+                <ListView x:Name="list_view_files" Visibility="Collapsed" Background="Bisque" Style="{StaticResource BigFont_TextBlock_Style}" MouseDoubleClick="List_view_files_MouseDoubleClick"/>
 
             </Grid>
 
