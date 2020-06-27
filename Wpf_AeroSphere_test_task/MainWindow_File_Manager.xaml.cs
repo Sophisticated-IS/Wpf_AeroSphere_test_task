@@ -41,7 +41,7 @@ namespace Wpf_AeroSphere_test_task
                 {
                     if (volumes.AllDrives[list_volumes.SelectedIndex].IsReady)
                     {
-                        volumes.Choose_disk(list_view_disks, list_view_files, list_volumes, txt_box_Path, data_grid_disks_meta_data);
+                        volumes.Choose_disk(Grid_drives, Grid_files_and_folders, list_view_files, list_volumes, txt_box_Path, data_grid_disks_meta_data);
                     }
                     else
                     {
@@ -83,10 +83,11 @@ namespace Wpf_AeroSphere_test_task
 
             if (list_folders_and_files != null && list_folders_and_files.Items.Count > 0 && list_folders_and_files.SelectedIndex >= 0)
             {
-                string doc_or_folder_name = (string)list_folders_and_files.SelectedValue;
+                File_ico_and_name file_ico_name = (File_ico_and_name)list_folders_and_files.SelectedValue;
+                string doc_or_folder_name = file_ico_name.Name;
                 if (!string.IsNullOrEmpty(doc_or_folder_name) && string.IsNullOrEmpty(Path.GetExtension(doc_or_folder_name)))
                 {
-                    volumes.Directory_down(list_view_files, txt_box_Path, doc_or_folder_name, Path.Combine(volumes.CurrentDirName, doc_or_folder_name));
+                    volumes.Directory_down(list_view_files, txt_box_Path, Path.Combine(volumes.CurrentDirName, doc_or_folder_name));
                 }
                 else//значит это файл так как у него есть расширение
                 {
@@ -108,7 +109,46 @@ namespace Wpf_AeroSphere_test_task
         private void Left_arrow_Button_Click(object sender, RoutedEventArgs e)
         {
             // volumes.Return_to_disk_choosing(list_view_disks, list_view_files, txt_box_Path, data_grid_disks_meta_data);
-            volumes.Directory_up(list_view_files,txt_box_Path);
+            volumes.Directory_up(list_view_files, txt_box_Path);
+        }
+
+        private void List_view_files_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            ListView list_files = (ListView)sender;
+            if (list_files.SelectedValue != null)
+            {
+                var path_dir = Path.Combine(volumes.CurrentDirName, list_files.SelectedValue.ToString());
+                var dir_info = new DirectoryInfo(path_dir);
+
+                var dir = Path.GetDirectoryName(path_dir);
+                var file = Path.GetFileName(path_dir);
+
+                var shellAppType = Type.GetTypeFromProgID("Shell.Application");
+                dynamic shell = Activator.CreateInstance(shellAppType);
+                var folder = shell.NameSpace(dir);
+                var folderItem = folder.ParseName(file);
+
+                var names =
+                    (from idx in Enumerable.Range(0, short.MaxValue)
+                     let key = (string)folder.GetDetailsOf(null, idx) // пришлось вставить cast
+                     where !string.IsNullOrEmpty(key)
+                     select (idx, key)).ToDictionary(p => p.idx, p => p.key);
+
+                var properties =
+                    (from idx in names.Keys
+                     orderby idx
+                     let value = (string)folder.GetDetailsOf(folderItem, idx) // пришлось вставить cast
+                     where !string.IsNullOrEmpty(value)
+                     select (name: names[idx], value)).ToList();
+
+                foreach (var item in properties)
+                {
+                    Debug.WriteLine(item.value);
+                }
+                
+            }
+            else;//клик был не на элемент
+
         }
     }
 }

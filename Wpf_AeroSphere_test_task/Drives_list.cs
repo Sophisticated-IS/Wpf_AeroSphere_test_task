@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using System.Windows.Media;
 
 namespace Wpf_AeroSphere_test_task
 {
+
     class Drives_list : IDirChangeable
     {
         struct Hardware_ico_and_info//хранит картинку и информацию о приводе
@@ -41,7 +43,7 @@ namespace Wpf_AeroSphere_test_task
         }
         public DriveInfo[] AllDrives { get; set; }//массив всех приводов
 
-        public void Choose_disk(ListView list_view_disks, ListView list_view_folders, ListView list_volumes, TextBox txt_box_Path, DataGrid data_grid_meta_data)//Переход из списка дисков к файлам на этом диске
+        public void Choose_disk(Grid grid_files_and_folders, Grid grid_drives, ListView list_view_folders, ListView list_volumes, TextBox txt_box_Path, DataGrid data_grid_meta_data)//Переход из списка дисков к файлам на этом диске
         {
             is_disk_choosen = true;
             data_grid_meta_data.Items.Clear();
@@ -49,27 +51,28 @@ namespace Wpf_AeroSphere_test_task
             currentDirName = list_volumes.SelectedItem.GetType().GetProperty("Name").GetValue(list_volumes.SelectedItem, null).ToString();
             choosen_disk = currentDirName;
             txt_box_Path.Text = $"{default_root_dir}{currentDirName}";
-            Switch_btw_files_and_disks_listviews(list_view_disks, list_view_folders);
+            Switch_btw_grid_files_and_disks(grid_files_and_folders, grid_drives);
             list_view_folders.Items.Clear();
             foreach (var item in from filepath in GetAllFiles() select Path.GetFileName(filepath))
             {
-                list_view_folders.Items.Add(item);
+                Icon extractedIcon = Files_ico_Win32API.GetIcon(Path.Combine(currentDirName,item),true);
+                list_view_folders.Items.Add(new File_ico_and_name {Name = item,Ico = Convert_images.Convert_to_ImageSource(extractedIcon.ToBitmap())});
             }
         }
 
-        public void Return_to_disk_choosing(ListView list_view_disks, ListView list_view_files, TextBox txt_box_Path, DataGrid data_grid_meta_data)//возврат к каталогу со всеми дисками
+        public void Return_to_disk_choosing(Grid grid_files_and_folders, Grid grid_drives, ListView list_view_files, TextBox txt_box_Path, DataGrid data_grid_meta_data)//возврат к каталогу со всеми дисками
         {
             if (is_disk_choosen)
             {
                 is_disk_choosen = false;
                 data_grid_meta_data.Visibility = Visibility.Visible;
                 txt_box_Path.Text = default_root_dir;
-                Switch_btw_files_and_disks_listviews(list_view_disks, list_view_files);
+                Switch_btw_grid_files_and_disks(grid_files_and_folders, grid_drives);
             }
             else;//мы итак в директории выборе диска находимся
         }
 
-        public void Directory_down(ListView list_view_folders, TextBox txt_box_Path, string selected_folder, string currentDirName)
+        public void Directory_down(ListView list_view_folders, TextBox txt_box_Path, string currentDirName)
         {
             this.currentDirName = currentDirName;
             txt_box_Path.Text = default_root_dir + currentDirName;
@@ -89,7 +92,7 @@ namespace Wpf_AeroSphere_test_task
                 currentDirName = currentDirName.TrimEnd(current_folder.ToCharArray());
                 if (CurrentDirName == choosen_disk)
                 {
-                    
+                    //если это корень тома,то мы не удаляем слэши
                 }
                 else
                 {
@@ -113,8 +116,8 @@ namespace Wpf_AeroSphere_test_task
 
             for (int i = 0; i < all_files_and_folders.Length; i++)
             {
-                var tmp = new DirectoryInfo(all_files_and_folders[i]);
-                if ((tmp.Attributes & FileAttributes.Hidden) == 0)
+                var dir_info = new DirectoryInfo(all_files_and_folders[i]);
+                if ((dir_info.Attributes & FileAttributes.Hidden) == 0)
                 {
                     not_hidden_folders_files.Add(all_files_and_folders[i]);
                 }
@@ -208,17 +211,17 @@ namespace Wpf_AeroSphere_test_task
 
             }
         }
-        private void Switch_btw_files_and_disks_listviews(ListView list_view_disks, ListView list_view_files)
+        private void Switch_btw_grid_files_and_disks(Grid grid_files_and_folders, Grid grid_drives)//меняет свойство Visibility для переключения между выбором устройства и файловой системы выбранного устройства 
         {
-            if (list_view_disks.Visibility == Visibility.Collapsed)
+            if (grid_drives.Visibility == Visibility.Collapsed)
             {
-                list_view_disks.Visibility = Visibility.Visible;
-                list_view_files.Visibility = Visibility.Collapsed;
+                grid_drives.Visibility = Visibility.Visible;
+                grid_files_and_folders.Visibility = Visibility.Collapsed;
             }
             else
             {
-                list_view_disks.Visibility = Visibility.Collapsed;
-                list_view_files.Visibility = Visibility.Visible;
+                grid_drives.Visibility = Visibility.Collapsed;
+                grid_files_and_folders.Visibility = Visibility.Visible;
             }
 
         }

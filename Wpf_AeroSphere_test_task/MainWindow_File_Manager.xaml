@@ -74,15 +74,16 @@
 
             </DockPanel>
         </Grid>
-
-        <Grid Grid.Row="1" Background="AliceBlue">
+       
+        <!--Грид для страницы с дисками-->
+        <Grid x:Name="Grid_drives" Grid.Row="1" Background="AliceBlue">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0">
-                <GroupBox Header="All available Drives" Style="{StaticResource BigFont_TextBlock_Style}">
+                <GroupBox Name="group_box_drives" Header="All available Drives" Style="{StaticResource BigFont_TextBlock_Style}">
                     <ListView Name="list_view_disks" SelectionMode="Single" MouseDoubleClick="List_view_disks_MouseDoubleClick"  
                                                    Background="Bisque" MouseLeftButtonUp="List_view_disks_MouseLeftButtonUp">
                         <ListView.ItemTemplate>
@@ -106,19 +107,15 @@
                                         </ProgressBar.RenderTransform>
                                     </ProgressBar>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock xml:space="preserve" Text="{Binding AvailableFreeSpace}" Style="{StaticResource TextBlock_Low_Font_info}">Gb is free from </TextBlock>
+                                        <TextBlock xml:space="preserve" Text="{Binding AvailableFreeSpace}" Style="{StaticResource TextBlock_Low_Font_info}">Gb is free from</TextBlock>
                                         <TextBlock Text="{Binding TotalSize}" Style="{StaticResource TextBlock_Low_Font_info}"> Gb</TextBlock>
                                     </StackPanel>
-                                    
+
                                 </StackPanel>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
                 </GroupBox>
-
-
-                <ListView x:Name="list_view_files" Visibility="Collapsed" Background="Bisque" Style="{StaticResource BigFont_TextBlock_Style}" MouseDoubleClick="List_view_files_MouseDoubleClick"/>
-
             </Grid>
 
             <GridSplitter Grid.Column="1" ShowsPreview="False" Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="#A66800"/>
@@ -131,6 +128,44 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>
+        </Grid>
+        
+        <!--Грид для страницы с папками и файлами-->
+        <Grid x:Name="Grid_files_and_folders" Grid.Row="1" Background="AliceBlue" Visibility="Collapsed">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                
+                <GroupBox Name="group_box_files" Header="Files and Folders" Style="{StaticResource BigFont_TextBlock_Style}">
+                    <ListView x:Name="list_view_files" Background="Bisque" Style="{StaticResource BigFont_TextBlock_Style}" 
+                          MouseDoubleClick="List_view_files_MouseDoubleClick" MouseLeftButtonUp="List_view_files_MouseLeftButtonUp">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="{Binding Ico}"/>
+                                    <TextBlock Text="{Binding Name}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </GroupBox>
+
+
+            </Grid>
+
+            <GridSplitter Grid.Column="1" ShowsPreview="False" Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="#A66800"/>
+
+            <!--<Grid Grid.Column="2" Background="Gray">
+                <DataGrid x:Name="data_grid_disks_meta_data" Visibility="Collapsed">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header= "Attribute" Binding="{Binding Name,Mode=OneWay }" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Value" Binding="{Binding Value,Mode=OneWay}" IsReadOnly="True"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>-->
         </Grid>
     </Grid>
 </Window>
