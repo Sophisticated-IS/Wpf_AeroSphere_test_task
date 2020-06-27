@@ -22,14 +22,14 @@ namespace Wpf_AeroSphere_test_task
     /// </summary>
     public partial class MainWindow : Window
     {
-        readonly Drives_list volumes; 
+        readonly Drives_list volumes;
 
         public MainWindow()
         {
             InitializeComponent();
-            
-            txt_box_Path.Text = "💻MyComputer";
-            volumes  = new Drives_list(list_view_disks);//экземпляр нашей файловой системы                            
+
+            txt_box_Path.Text = "💻MyComputer ❯ ";
+            volumes = new Drives_list(list_view_disks);//экземпляр нашей файловой системы                            
         }
 
         private void List_view_disks_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -61,7 +61,7 @@ namespace Wpf_AeroSphere_test_task
             var list_volumes = (ListView)sender;
             if (list_volumes != null && list_volumes.Items.Count > 0 && list_volumes.SelectedIndex >= 0)
             {
-                
+
                 if (volumes.AllDrives[list_volumes.SelectedIndex].IsReady)
                 {
                     foreach (var prop in volumes.AllDrives[list_volumes.SelectedIndex].GetType().GetProperties())
@@ -84,10 +84,9 @@ namespace Wpf_AeroSphere_test_task
             if (list_folders_and_files != null && list_folders_and_files.Items.Count > 0 && list_folders_and_files.SelectedIndex >= 0)
             {
                 string doc_or_folder_name = (string)list_folders_and_files.SelectedValue;
-                if (!string.IsNullOrEmpty(doc_or_folder_name) && string.IsNullOrEmpty(Path.GetExtension(doc_or_folder_name)) )
+                if (!string.IsNullOrEmpty(doc_or_folder_name) && string.IsNullOrEmpty(Path.GetExtension(doc_or_folder_name)))
                 {
-                    volumes.CurrentDirName = Path.Combine(volumes.CurrentDirName, doc_or_folder_name);
-                    volumes.Directory_down(list_view_files,txt_box_Path,doc_or_folder_name);
+                    volumes.Directory_down(list_view_files, txt_box_Path, doc_or_folder_name, Path.Combine(volumes.CurrentDirName, doc_or_folder_name));
                 }
                 else//значит это файл так как у него есть расширение
                 {
@@ -99,10 +98,8 @@ namespace Wpf_AeroSphere_test_task
                     catch (System.ComponentModel.Win32Exception)//не удалось найти приложение для данного файла
                     {
                         Process.Start(new ProcessStartInfo { FileName = "explorer.exe", Arguments = full_path });//вызовем открыть с помощью и пусть пользователь выберет
-                        
                     }
-                   
-                    
+
                 }
             }
             else;//элемент не выбран или его нет
@@ -110,7 +107,8 @@ namespace Wpf_AeroSphere_test_task
 
         private void Left_arrow_Button_Click(object sender, RoutedEventArgs e)
         {
-            volumes.Return_to_disk_choosing(list_view_disks, list_view_files, txt_box_Path, data_grid_disks_meta_data);
+            // volumes.Return_to_disk_choosing(list_view_disks, list_view_files, txt_box_Path, data_grid_disks_meta_data);
+            volumes.Directory_up(list_view_files,txt_box_Path);
         }
     }
 }
