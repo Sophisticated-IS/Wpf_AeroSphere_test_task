@@ -15,7 +15,7 @@ namespace Wpf_AeroSphere_test_task
 {
     class Drives_list : IDirChangeable
     {
-        struct Hardware_ico_and_info
+        struct Hardware_ico_and_info//хранит картинку и информацию о приводе
         {
             public ImageSource hardware_ico;// картинка носителя информации диска или флешки
             public DriveInfo drive_info;//информация о носителе
@@ -28,9 +28,11 @@ namespace Wpf_AeroSphere_test_task
         private string currentDirName;//имя текущей директории
         private string prev_DirName;
         private string next_DirName;
+        private string current_folder;
         private bool is_disk_choosen = false;
         private const string default_root_dir = "💻MyComputer";//имя корневой папки
         private const string divide_symbol = "❯";//символ разделения каталогов
+        private const string files_extensions = "*.exe,*.txt,*";
         private const int disks_interrogation_delay = 3000;
         public string CurrentDirName
         {
@@ -44,7 +46,7 @@ namespace Wpf_AeroSphere_test_task
                 Directory.SetCurrentDirectory(currentDirName);
             }
         }
-        public DriveInfo[] AllDrives { get; set; }//массив всех дисков 
+        public DriveInfo[] AllDrives { get; set; }//массив всех приводов
 
         public void Choose_disk(ListView list_view_disks, ListView list_view_files, ListView list_volumes, TextBox txt_box_Path, DataGrid data_grid_meta_data)//Переход из списка дисков к файлам на этом диске
         {
@@ -52,9 +54,12 @@ namespace Wpf_AeroSphere_test_task
             data_grid_meta_data.Items.Clear();
             data_grid_meta_data.Visibility = Visibility.Collapsed;
             currentDirName = list_volumes.SelectedItem.GetType().GetProperty("Name").GetValue(list_volumes.SelectedItem,null).ToString();
+            current_folder = currentDirName;
+            prev_DirName = currentDirName;
+            next_DirName = currentDirName;
             txt_box_Path.Text = $"{default_root_dir} {divide_symbol} {currentDirName}";
             Switch_btw_files_and_disks_listviews(list_view_disks, list_view_files);
-            list_view_files.ItemsSource = (from filepath in GetAllFiles() select Path.GetFileName(filepath)).ToList();
+            list_view_files.ItemsSource = from filepath in GetAllFiles() select Path.GetFileName(filepath);
         }
 
         public void Return_to_disk_choosing(ListView list_view_disks, ListView list_view_files, TextBox txt_box_Path, DataGrid data_grid_meta_data)//возврат к каталогу со всеми дисками
@@ -69,10 +74,27 @@ namespace Wpf_AeroSphere_test_task
             else;//мы итак в директории выборе диска находимся
         }
 
-        public string[] GetAllFiles()
+        public void Directory_down(ListView list_view_folders, TextBox txt_box_Path, string selected_folder)
         {
-            //  return Directory.GetFiles(@"C:\","*");
-            return Directory.GetDirectories(currentDirName);
+            current_folder = selected_folder;
+            txt_box_Path.Text = $"{txt_box_Path.Text} {divide_symbol} {current_folder}";
+            list_view_folders.ItemsSource = from filepath in GetAllFiles() select Path.GetFileName(filepath);
+        }
+
+        private List<string> GetAllFiles()//возвращает список всех папок и файлов НЕ скрытых
+        {
+            var all_files_and_folders = Directory.GetFileSystemEntries(currentDirName);//все файлы и папки
+            List<string> not_hidden_folders_files = new List<string>();//только не скрытые Файлы и папки
+           
+            for (int i = 0; i < all_files_and_folders.Length; i++)
+            {
+                var tmp = new DirectoryInfo(all_files_and_folders[i]);
+                if ( (tmp.Attributes & FileAttributes.Hidden) == 0)
+                {
+                    not_hidden_folders_files.Add(all_files_and_folders[i]);
+                }
+            }
+            return not_hidden_folders_files;
         }
         private async void Get_all_drives(ListView list_view_disks)//получает список всех доступных дисков и устройств динамически обновляя их
         {

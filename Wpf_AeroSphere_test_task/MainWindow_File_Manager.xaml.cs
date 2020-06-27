@@ -13,7 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
+
 
 namespace Wpf_AeroSphere_test_task
 {
@@ -56,6 +56,7 @@ namespace Wpf_AeroSphere_test_task
 
         private void List_view_disks_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+            data_grid_disks_meta_data.Visibility = Visibility.Visible;
             data_grid_disks_meta_data.Items.Clear();
             var list_volumes = (ListView)sender;
             if (list_volumes != null && list_volumes.Items.Count > 0 && list_volumes.SelectedIndex >= 0)
@@ -82,7 +83,27 @@ namespace Wpf_AeroSphere_test_task
 
             if (list_folders_and_files != null && list_folders_and_files.Items.Count > 0 && list_folders_and_files.SelectedIndex >= 0)
             {
-                
+                string doc_or_folder_name = (string)list_folders_and_files.SelectedValue;
+                if (!string.IsNullOrEmpty(doc_or_folder_name) && string.IsNullOrEmpty(Path.GetExtension(doc_or_folder_name)) )
+                {
+                    volumes.CurrentDirName = Path.Combine(volumes.CurrentDirName, doc_or_folder_name);
+                    volumes.Directory_down(list_view_files,txt_box_Path,doc_or_folder_name);
+                }
+                else//значит это файл так как у него есть расширение
+                {
+                    var full_path = Path.Combine(volumes.CurrentDirName, doc_or_folder_name);
+                    try
+                    {
+                        Process.Start(full_path);
+                    }
+                    catch (System.ComponentModel.Win32Exception)//не удалось найти приложение для данного файла
+                    {
+                        Process.Start(new ProcessStartInfo { FileName = "explorer.exe", Arguments = full_path });//вызовем открыть с помощью и пусть пользователь выберет
+                        
+                    }
+                   
+                    
+                }
             }
             else;//элемент не выбран или его нет
         }

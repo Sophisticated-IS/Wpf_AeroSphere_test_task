@@ -35,7 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>file_manager.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\file_manager.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -102,7 +102,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="file_manager.ico" />
+    <Resource Include="Resources\file_manager.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\hp_flash_drive.ico" />

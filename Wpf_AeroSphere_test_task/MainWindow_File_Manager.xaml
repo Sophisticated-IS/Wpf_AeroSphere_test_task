@@ -77,9 +77,9 @@
 
         <Grid Grid.Row="1" Background="AliceBlue">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0">
                 <GroupBox Header="All available Drives" Style="{StaticResource BigFont_TextBlock_Style}">
@@ -124,7 +124,7 @@
             <GridSplitter Grid.Column="1" ShowsPreview="False" Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="#A66800"/>
 
             <Grid Grid.Column="2" Background="Gray">
-                <DataGrid x:Name="data_grid_disks_meta_data">
+                <DataGrid x:Name="data_grid_disks_meta_data" Visibility="Collapsed">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header= "Attribute" Binding="{Binding Name,Mode=OneWay }" IsReadOnly="True"/>
                         <DataGridTextColumn Header="Value" Binding="{Binding Value,Mode=OneWay}" IsReadOnly="True"/>
