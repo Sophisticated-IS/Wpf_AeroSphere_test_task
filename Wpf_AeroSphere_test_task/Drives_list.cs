@@ -71,58 +71,87 @@ namespace Wpf_AeroSphere_test_task
 
         public string[] GetAllFiles()
         {
-            return Directory.GetFiles(currentDirName);
+            //  return Directory.GetFiles(@"C:\","*");
+            return Directory.GetDirectories(currentDirName);
         }
-        private async void Get_all_drives(ListView list_view_disks)
+        private async void Get_all_drives(ListView list_view_disks)//получает список всех доступных дисков и устройств динамически обновляя их
         {
             while (true)
-            {
-                list_view_disks.Items.Clear();
-                AllDrives = DriveInfo.GetDrives();
-                Hardware_ico_and_info img_and_info;
-                for (int i = 0; i < AllDrives.Length; i++)//Добавим по картинке к каждому устройству
+            {               
+                var new_drives =  DriveInfo.GetDrives();
+                bool not_all_equal = false;//не все приводы/диски равны
+                if (AllDrives!= null && AllDrives.Length == new_drives.Length)
                 {
-                    img_and_info.drive_info = AllDrives[i];
-
-                    switch (AllDrives[i].DriveType)
+                    for (int i = 0; i < new_drives.Length; i++)
                     {
-                        case DriveType.Fixed:
-                            img_and_info.hardware_ico = Convert_images.Convert_to_ImageSource(Properties.Resources.hp_hdd.ToBitmap());
-                            break;
-
-                        case DriveType.Removable:
-                            img_and_info.hardware_ico = Convert_images.Convert_to_ImageSource(Properties.Resources.hp_flash_drive.ToBitmap());
-                            break;
-                        default:
-                            img_and_info.hardware_ico = Convert_images.Convert_to_ImageSource(Properties.Resources.question_shield.ToBitmap());
-                            break;
-                    }
-
-                    if (img_and_info.drive_info.IsReady)
-                    {
-                        list_view_disks.Items.Add(new
+                        if (new_drives[i].Name == AllDrives[i].Name && new_drives[i].DriveType == AllDrives[i].DriveType)
                         {
-                            VolumeLabel = img_and_info.drive_info.VolumeLabel,
-                            Name = img_and_info.drive_info.Name,
-                            AvailableFreeSpace = img_and_info.drive_info.AvailableFreeSpace,
-                            TotalSize = img_and_info.drive_info.TotalSize,
-                            Img = img_and_info.hardware_ico
-                        });
-                    }
-                    else
-                    {
-                        list_view_disks.Items.Add(new
+
+                        }
+                        else
                         {
-                            VolumeLabel = "Uknown",
-                            Name = img_and_info.drive_info.Name,
-                            Img = img_and_info.hardware_ico
-                        });
+                            not_all_equal = true;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    not_all_equal = true;
+                }               
+
+                if (not_all_equal)
+                {
+                    list_view_disks.Items.Clear();
+                    AllDrives = new_drives;//обновим список приводов на новый
+                    Hardware_ico_and_info img_and_info;
+                    for (int i = 0; i < AllDrives.Length; i++)//Добавим по картинке к каждому устройству
+                    {
+                        img_and_info.drive_info = AllDrives[i];
+
+                        switch (AllDrives[i].DriveType)
+                        {
+                            case DriveType.Fixed:
+                                img_and_info.hardware_ico = Convert_images.Convert_to_ImageSource(Properties.Resources.hp_hdd.ToBitmap());
+                                break;
+
+                            case DriveType.Removable:
+                                img_and_info.hardware_ico = Convert_images.Convert_to_ImageSource(Properties.Resources.hp_flash_drive.ToBitmap());
+                                break;
+                            default:
+                                img_and_info.hardware_ico = Convert_images.Convert_to_ImageSource(Properties.Resources.question_shield.ToBitmap());
+                                break;
+                        }
+
+                        if (img_and_info.drive_info.IsReady)
+                        {
+                            list_view_disks.Items.Add(new
+                            {
+                                VolumeLabel = img_and_info.drive_info.VolumeLabel,
+                                Name = img_and_info.drive_info.Name,
+                                AvailableFreeSpace = img_and_info.drive_info.AvailableFreeSpace >> 30,
+                                TotalSize = img_and_info.drive_info.TotalSize >> 30,
+                                Img = img_and_info.hardware_ico
+                            });
+                        }
+                        else
+                        {
+                            list_view_disks.Items.Add(new
+                            {
+                                VolumeLabel = "Uknown",
+                                Name = img_and_info.drive_info.Name,
+                                Img = img_and_info.hardware_ico
+                            });
+                        }
+
                     }
 
                 }
+                else;
+
                 if (AllDrives.Length > 0)
                 {
-                    //Значит все хорошо, так как в системе есть хоть одно запоминающее устройство
+                    //Значит все хорошо, так как в системе есть хоть одно запоминающее устройство                    
                     await Task.Delay(disks_interrogation_delay);
                 }
                 else

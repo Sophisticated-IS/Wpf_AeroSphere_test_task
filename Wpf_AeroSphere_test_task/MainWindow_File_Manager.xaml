@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Wpf_AeroSphere_test_task"
+        
         mc:Ignorable="d"
         Title="File Manager AeroSphere" Height="450" Width="800">
 
@@ -21,6 +22,13 @@
             <Setter Property="ItemsControl.FontSize" Value="18"/>
             <Setter Property="ItemsControl.Foreground" Value="#BF8930"/>
         </Style>
+
+        <Style  x:Key="TextBlock_Low_Font_info">
+            <Setter Property="ItemsControl.Background" Value="Gray"/>
+            <Setter Property="ItemsControl.FontSize" Value="12"/>
+            <Setter Property="ItemsControl.FontWeight" Value="Light"/>
+        </Style>
+
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -50,18 +58,13 @@
                     <Grid Grid.Column="0" Background="#BF8930">
                         <TextBlock Style="{StaticResource BigFont_TextBlock_Style}" >
                             <TextBlock.Background>
-                                <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
-                                    <GradientStop Color="#FF8B00" Offset="0.1"/>
-                                    <GradientStop Color="#FFFFEFA1" Offset="0.6"/>
+                                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                    <GradientStop Color="#FFFF8B00" Offset="0.414"/>
+                                    <GradientStop Color="#FFFFEFA1" Offset="0.873"/>
+                                    <GradientStop Color="#FFFFEFA1" Offset="0.438"/>
                                 </LinearGradientBrush>
-                            </TextBlock.Background>
-                            <TextBlock.Foreground>
-                                <LinearGradientBrush>
-                                    <GradientStop Color="Black" Offset="1" />
-                                    <GradientStop Color="Black" Offset="0" />
-                                </LinearGradientBrush>
-                            </TextBlock.Foreground>
-                            Path: 📁 <Run Foreground="Gray"> ❯ </Run> </TextBlock>
+                            </TextBlock.Background>                  
+                            Path: 📁  <Run Foreground="Gray"> ❯ </Run></TextBlock>
                     </Grid>
 
                     <Grid Grid.Column="1">
@@ -102,6 +105,11 @@
                                             </TransformGroup>
                                         </ProgressBar.RenderTransform>
                                     </ProgressBar>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock xml:space="preserve" Text="{Binding AvailableFreeSpace}" Style="{StaticResource TextBlock_Low_Font_info}">Gb is free from </TextBlock>
+                                        <TextBlock Text="{Binding TotalSize}" Style="{StaticResource TextBlock_Low_Font_info}"> Gb</TextBlock>
+                                    </StackPanel>
+                                    
                                 </StackPanel>
                             </DataTemplate>
                         </ListView.ItemTemplate>
