@@ -107,8 +107,8 @@
                                         </ProgressBar.RenderTransform>
                                     </ProgressBar>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock xml:space="preserve" Text="{Binding AvailableFreeSpace}" Style="{StaticResource TextBlock_Low_Font_info}">Gb is free from</TextBlock>
-                                        <TextBlock Text="{Binding TotalSize}" Style="{StaticResource TextBlock_Low_Font_info}"> Gb</TextBlock>
+                                        <TextBlock xml:space="preserve" Text="{Binding AvailableFreeSpace}" Style="{StaticResource TextBlock_Low_Font_info}">Gb is free from </TextBlock>
+                                        <TextBlock xml:space="preserve" Text="{Binding TotalSize}" Style="{StaticResource TextBlock_Low_Font_info}"> Gb</TextBlock>
                                     </StackPanel>
 
                                 </StackPanel>
@@ -158,14 +158,15 @@
 
             <GridSplitter Grid.Column="1" ShowsPreview="False" Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="#A66800"/>
 
-            <!--<Grid Grid.Column="2" Background="Gray">
-                <DataGrid x:Name="data_grid_disks_meta_data" Visibility="Collapsed">
+            <Grid Grid.Column="2" Background="Gray">
+                <DataGrid x:Name="data_grid_files_meta_data" Visibility="Collapsed">
+                    
                     <DataGrid.Columns>
                         <DataGridTextColumn Header= "Attribute" Binding="{Binding Name,Mode=OneWay }" IsReadOnly="True"/>
                         <DataGridTextColumn Header="Value" Binding="{Binding Value,Mode=OneWay}" IsReadOnly="True"/>
                     </DataGrid.Columns>
                 </DataGrid>
-            </Grid>-->
+            </Grid>
         </Grid>
     </Grid>
 </Window>

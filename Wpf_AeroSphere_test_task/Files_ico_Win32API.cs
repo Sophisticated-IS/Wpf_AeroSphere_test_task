@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Wpf_AeroSphere_test_task
 {
-   static class Files_ico_Win32API
+    static class Files_ico_Win32API
     {
         [StructLayout(LayoutKind.Sequential)]
         public struct SHFILEINFO
@@ -37,26 +37,24 @@ namespace Wpf_AeroSphere_test_task
         private static extern int DestroyIcon(IntPtr hIcon);
         public static Icon GetIcon(string path, bool bolshaya)
         {
-            IntPtr hImgSmall;
-            IntPtr hImgLarge;
             SHFILEINFO shinfo = new SHFILEINFO();
 
             if (!bolshaya)
             {
-                hImgSmall = Files_ico_Win32API.SHGetFileInfo(path, 0, ref shinfo,
+                SHGetFileInfo(path, 0, ref shinfo,
                 (uint)Marshal.SizeOf(shinfo),
-                Files_ico_Win32API.SHGFI_ICON |
-                Files_ico_Win32API.SHGFI_SMALLICON);
+                SHGFI_ICON |
+                SHGFI_SMALLICON);
             }
 
             else
             {
-                hImgLarge = Files_ico_Win32API.SHGetFileInfo(path, 0,
+                SHGetFileInfo(path, 0,
                 ref shinfo, (uint)Marshal.SizeOf(shinfo),
-                Files_ico_Win32API.SHGFI_ICON | Files_ico_Win32API.SHGFI_LARGEICON);
+                SHGFI_ICON | SHGFI_LARGEICON);
             }
 
-            System.Drawing.Icon myIcon = (System.Drawing.Icon)System.Drawing.Icon.FromHandle(shinfo.hIcon).Clone();
+            Icon myIcon = (Icon)Icon.FromHandle(shinfo.hIcon).Clone(); 
             DestroyIcon(shinfo.hIcon);
             return myIcon;
         }

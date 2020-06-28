@@ -52,12 +52,7 @@ namespace Wpf_AeroSphere_test_task
             choosen_disk = currentDirName;
             txt_box_Path.Text = $"{default_root_dir}{currentDirName}";
             Switch_btw_grid_files_and_disks(grid_files_and_folders, grid_drives);
-            list_view_folders.Items.Clear();
-            foreach (var item in from filepath in GetAllFiles() select Path.GetFileName(filepath))
-            {
-                Icon extractedIcon = Files_ico_Win32API.GetIcon(Path.Combine(currentDirName,item),true);
-                list_view_folders.Items.Add(new File_ico_and_name {Name = item,Ico = Convert_images.Convert_to_ImageSource(extractedIcon.ToBitmap())});
-            }
+            Update_listview_folders(list_view_folders);            
         }
 
         public void Return_to_disk_choosing(Grid grid_files_and_folders, Grid grid_drives, ListView list_view_files, TextBox txt_box_Path, DataGrid data_grid_meta_data)//возврат к каталогу со всеми дисками
@@ -76,11 +71,7 @@ namespace Wpf_AeroSphere_test_task
         {
             this.currentDirName = currentDirName;
             txt_box_Path.Text = default_root_dir + currentDirName;
-            list_view_folders.Items.Clear();
-            foreach (var item in from filepath in GetAllFiles() select Path.GetFileName(filepath))
-            {
-                list_view_folders.Items.Add(item);
-            }            
+            Update_listview_folders(list_view_folders);
         }
 
         public void Directory_up(ListView list_view_folders, TextBox txt_box_Path)
@@ -100,18 +91,14 @@ namespace Wpf_AeroSphere_test_task
                 }
                 
                 txt_box_Path.Text = default_root_dir + currentDirName;
-                list_view_folders.Items.Clear();
-                foreach (var item in from filepath in GetAllFiles() select Path.GetFileName(filepath))
-                {
-                    list_view_folders.Items.Add(item);
-                }
+                Update_listview_folders(list_view_folders);
             }
             else; //мы уже итак в этой директории
 
         }
         private List<string> GetAllFiles()//возвращает список всех папок и файлов НЕ скрытых
         {
-            var all_files_and_folders = Directory.GetFileSystemEntries(currentDirName);//все файлы и папки
+            var all_files_and_folders = Directory.GetFileSystemEntries(currentDirName);//все файлы и папки 
             List<string> not_hidden_folders_files = new List<string>();//только не скрытые Файлы и папки
 
             for (int i = 0; i < all_files_and_folders.Length; i++)
@@ -224,6 +211,25 @@ namespace Wpf_AeroSphere_test_task
                 grid_files_and_folders.Visibility = Visibility.Visible;
             }
 
+        }
+
+        private void Update_listview_folders(ListView list_view_folders)//обновляет список с папками и файлами
+        {
+            list_view_folders.Items.Clear();
+            foreach (var item in from filepath in GetAllFiles() select Path.GetFileName(filepath))
+            {
+                try
+                {
+                    Icon extractedIcon = Files_ico_Win32API.GetIcon(Path.Combine(currentDirName, item), true);
+                    list_view_folders.Items.Add(new File_ico_and_name { Name = item, Ico = Convert_images.Convert_to_ImageSource(extractedIcon.ToBitmap()) });
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Не удалось загрузить папку так как в ней есть системные файлы - {ex}");
+                    break;                    
+                }
+                
+            }
         }
     }
 }
