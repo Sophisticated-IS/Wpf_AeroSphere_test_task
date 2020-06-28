@@ -28,6 +28,7 @@ namespace Wpf_AeroSphere_test_task
         int files_counter = 0;//для полсчета кол-ва файлов в папке
         long size_folder_in_byte = 0;//для подсчета размера папки с файлами
         string Previos_file_name;//имя предыдущего выбранного файла
+        private const string search_message = "Search: 🔎";//подсказка для поиска файлов в текстбоксе
         public MainWindow()
         {
             InitializeComponent();
@@ -161,7 +162,7 @@ namespace Wpf_AeroSphere_test_task
 
                     Thread.Sleep(300);
                 }
-                
+
             });
         }
         private void Left_arrow_Button_Click(object sender, RoutedEventArgs e)
@@ -329,6 +330,49 @@ namespace Wpf_AeroSphere_test_task
             else;//поток не создан
 
             volumes.Return_to_disk_choosing(Grid_files_and_folders, Grid_drives, txt_box_Path);
+        }
+
+        private void Search_TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            var txt_box_search = (TextBox)sender;
+            txt_box_search.Text = "";
+            txt_box_search.Foreground = Brushes.Black;
+        }
+
+        private void Search_TextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            var txt_box_search = (TextBox)sender;
+            txt_box_search.Text = search_message;
+            txt_box_search.Foreground = Brushes.Gray;
+        }
+
+        private void Search_TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var txt_box_search = (TextBox)sender;
+            var searching_filename = txt_box_search.Text;
+            if (volumes != null && volumes.CurrentDirName != null && searching_filename!= search_message)// TODO: костыль ИСПРАВИТЬ
+            {
+                int i = 0;//TODO если пусто то надо вернуть все элементы на место
+                foreach (var file in list_view_files.Items)
+                {
+
+                    File_ico_and_name file_ico_name = (File_ico_and_name)file;
+                    if (file_ico_name.Name.StartsWith(searching_filename))
+                    {
+                        file_ico_name.Visible_mode = Visibility.Visible;
+                        //оставим нужные элементы
+                    }
+                    else//скроем
+                    {
+                        file_ico_name.Visible_mode = Visibility.Collapsed;
+                    }
+                   
+                    i++;
+                }          
+                    list_view_files.Items.Refresh();       
+                
+            }
+            else;//негде искать
         }
     }
 }

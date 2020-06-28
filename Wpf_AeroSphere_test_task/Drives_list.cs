@@ -54,13 +54,14 @@ namespace Wpf_AeroSphere_test_task
             Switch_btw_grid_files_and_disks(grid_files_and_folders, grid_drives);
             Update_listview_folders(list_view_folders);
         }
-
+                 
         public void Return_to_disk_choosing(Grid grid_files_and_folders, Grid grid_drives, TextBox txt_box_Path)//возврат к каталогу со всеми дисками
         {
             if (is_disk_choosen)
             {
                 is_disk_choosen = false;
                 txt_box_Path.Text = default_root_dir;
+                currentDirName = null;
                 Switch_btw_grid_files_and_disks(grid_files_and_folders, grid_drives);
             }
             else;//мы итак в директории выборе диска находимся

@@ -42,13 +42,19 @@
                     <Button Style="{StaticResource Button_Arrows_Style}" ToolTip="Вернуться на директорию назад" FontSize="25" Click="Left_arrow_Button_Click">
                         🡄
                     </Button>
-                    <Button Style="{StaticResource Button_Arrows_Style}" Foreground="black" FontSize="25" ToolTip="Вернуться к выбору диска" 
-                            FontWeight="Black"  Click="Return_to_disk_choosing_Button_Click">
+                    <Button Style="{StaticResource Button_Arrows_Style}" FontSize="25" ToolTip="Вернуться к выбору диска" 
+                            FontWeight="Black"  Click="Return_to_disk_choosing_Button_Click" >
+                        <Button.Foreground>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="White" Offset="0.929"/>
+                                <GradientStop Color="#FF2574C0" Offset="0.459"/>
+                            </LinearGradientBrush>
+                        </Button.Foreground>
                         ⬆
                     </Button>
                 </StackPanel>
 
-                <TextBox  DockPanel.Dock="Right" HorizontalAlignment="Right" Width="150" Margin="2">Search: 🔎</TextBox>
+                <TextBox  DockPanel.Dock="Right" FontSize="14" Foreground="Gray"  HorizontalAlignment="Right" Width="150" Margin="2" GotFocus="Search_TextBox_GotFocus" LostFocus="Search_TextBox_LostFocus" TextChanged="Search_TextBox_TextChanged">Search: 🔎</TextBox>
 
                 <Grid Margin="5,0,5,0">
                     <Grid.ColumnDefinitions>
@@ -75,7 +81,7 @@
 
             </DockPanel>
         </Grid>
-       
+
         <!--Грид для страницы с дисками-->
         <Grid x:Name="Grid_drives" Grid.Row="1" Background="AliceBlue">
             <Grid.ColumnDefinitions>
@@ -130,7 +136,7 @@
                 </DataGrid>
             </Grid>
         </Grid>
-        
+
         <!--Грид для страницы с папками и файлами-->
         <Grid x:Name="Grid_files_and_folders" Grid.Row="1" Background="AliceBlue" Visibility="Collapsed">
             <Grid.ColumnDefinitions>
@@ -139,7 +145,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0">
-                
+
                 <GroupBox Name="group_box_files" Header="Files and Folders" Style="{StaticResource BigFont_TextBlock_Style}">
                     <ListView x:Name="list_view_files" Background="Bisque" Style="{StaticResource BigFont_TextBlock_Style}" 
                           MouseDoubleClick="List_view_files_MouseDoubleClick" MouseLeftButtonUp="List_view_files_MouseLeftButtonUp">
@@ -147,10 +153,16 @@
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="{Binding Ico}"/>
-                                    <TextBlock Text="{Binding Name}"/>
+                                    <TextBlock Text="{Binding Name}" />
                                 </StackPanel>
                             </DataTemplate>
                         </ListView.ItemTemplate>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <!--<Setter Property="HorizontalContentAlignment" Value="Stretch" />--> <!--ДЛЯ 100% растяжения-->
+                                <Setter Property="Visibility"  Value="{Binding Visible_mode,Mode=OneWay}"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
                     </ListView>
                 </GroupBox>
 
@@ -161,7 +173,7 @@
 
             <Grid Grid.Column="2" Background="Gray" MaxWidth="400">
                 <DataGrid x:Name="data_grid_files_meta_data"  Visibility="Collapsed">
-                    
+
                     <DataGrid.Columns>
                         <DataGridTextColumn Header= "Attribute" Binding="{Binding Name,Mode=OneWay }" IsReadOnly="True"/>
                         <DataGridTextColumn Header="Value" Binding="{Binding Value,Mode=OneWay}" IsReadOnly="True"/>
