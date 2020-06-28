@@ -11,7 +11,7 @@ using System.Windows.Media;
 namespace Wpf_AeroSphere_test_task
 {
 
-    class Drives_list : IDirChangeable
+    class Drives_list //TODO: IDirChangeable
     {
         struct Hardware_ico_and_info//хранит картинку и информацию о приводе
         {
@@ -43,54 +43,43 @@ namespace Wpf_AeroSphere_test_task
         }
         public DriveInfo[] AllDrives { get; set; }//массив всех приводов
 
-        public void Choose_disk(Grid grid_files_and_folders, Grid grid_drives, ListView list_view_folders, ListView list_volumes, TextBox txt_box_Path, DataGrid data_grid_meta_data)//Переход из списка дисков к файлам на этом диске
+        public void Choose_disk(Grid grid_files_and_folders, Grid grid_drives, ListView list_view_folders, ListView list_volumes, ListView list_view_path_frames, DataGrid data_grid_meta_data)//Переход из списка дисков к файлам на этом диске
         {
             is_disk_choosen = true;
             data_grid_meta_data.Items.Clear();
             data_grid_meta_data.Visibility = Visibility.Collapsed;
             currentDirName = list_volumes.SelectedItem.GetType().GetProperty("Name").GetValue(list_volumes.SelectedItem, null).ToString();
             choosen_disk = currentDirName;
-            txt_box_Path.Text = $"{default_root_dir}{currentDirName}";
+            PathBuilder.dir_down(list_view_path_frames, currentDirName);
             Switch_btw_grid_files_and_disks(grid_files_and_folders, grid_drives);
             Update_listview_folders(list_view_folders);
         }
                  
-        public void Return_to_disk_choosing(Grid grid_files_and_folders, Grid grid_drives, TextBox txt_box_Path)//возврат к каталогу со всеми дисками
+        public void Return_to_disk_choosing(Grid grid_files_and_folders, Grid grid_drives, ListView list_view_path_frames)//возврат к каталогу со всеми дисками
         {
             if (is_disk_choosen)
             {
                 is_disk_choosen = false;
-                txt_box_Path.Text = default_root_dir;
+                list_view_path_frames.Items.Clear();
                 currentDirName = null;
                 Switch_btw_grid_files_and_disks(grid_files_and_folders, grid_drives);
             }
             else;//мы итак в директории выборе диска находимся
         }
 
-        public void Directory_down(ListView list_view_folders, TextBox txt_box_Path, string currentDirName)
+        public void Directory_down(ListView list_view_folders, ListView list_view_path_frames, string currentDirName)
         {
             this.currentDirName = currentDirName;
-            txt_box_Path.Text = default_root_dir + currentDirName;
+            PathBuilder.dir_down(list_view_path_frames, Path.GetFileName(currentDirName));
             Update_listview_folders(list_view_folders);
         }
 
-        public void Directory_up(ListView list_view_folders, TextBox txt_box_Path)
+        public void Directory_up(ListView list_view_folders, ListView list_view_path_frames)
         {
             if (currentDirName != null && currentDirName != choosen_disk)
             {
-                var current_folder = Path.GetFileName(currentDirName);
-
-                currentDirName = currentDirName.TrimEnd(current_folder.ToCharArray());
-                if (CurrentDirName == choosen_disk)
-                {
-                    //если это корень тома,то мы не удаляем слэши
-                }
-                else
-                {
-                    currentDirName = currentDirName.TrimEnd('\\');
-                }
-
-                txt_box_Path.Text = default_root_dir + currentDirName;
+                    PathBuilder.dir_up(list_view_path_frames);
+                    currentDirName = PathBuilder.Get_path(list_view_path_frames) ;       
                 Update_listview_folders(list_view_folders);
             }
             else; //мы уже итак в этой директории

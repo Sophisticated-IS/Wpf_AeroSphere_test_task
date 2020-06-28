@@ -54,7 +54,8 @@
                     </Button>
                 </StackPanel>
 
-                <TextBox  DockPanel.Dock="Right" FontSize="14" Foreground="Gray"  HorizontalAlignment="Right" Width="150" Margin="2" GotFocus="Search_TextBox_GotFocus" LostFocus="Search_TextBox_LostFocus" TextChanged="Search_TextBox_TextChanged">Search: 🔎</TextBox>
+                <TextBox  DockPanel.Dock="Right" FontSize="14" Foreground="Gray"  HorizontalAlignment="Right" Width="150" Margin="2" GotFocus="Search_TextBox_GotFocus" 
+                          LostFocus="Search_TextBox_LostFocus" TextChanged="Search_TextBox_TextChanged">Search: 🔎</TextBox>
 
                 <Grid Margin="5,0,5,0">
                     <Grid.ColumnDefinitions>
@@ -76,17 +77,26 @@
 
                     <Grid Grid.Column="1">
                         <StackPanel Orientation="Horizontal">
-                            <TextBox Name="txt_box_Path" BorderThickness="0" HorizontalAlignment="Stretch" Style="{StaticResource BigFont_TextBlock_Style}" FontStyle="Italic" IsReadOnly="True">💻MyComputer</TextBox>
-                            
-                            <ListView Background="Gray" >
+                            <TextBox  BorderThickness="0" HorizontalAlignment="Stretch" Style="{StaticResource BigFont_TextBlock_Style}" FontStyle="Italic" 
+                                      IsReadOnly="True">💻MyComputer ❯
+                            </TextBox>
+
+                            <ListView x:Name="list_view_path_frames" SelectionMode="Single" ScrollViewer.VerticalScrollBarVisibility="Disabled" 
+                                      ScrollViewer.HorizontalScrollBarVisibility="Auto" BorderThickness="0" MouseDoubleClick="list_view_path_frames_MouseDoubleClick">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                       
+                                            <Label Content="{Binding Divide_symbol}" FontSize="14" FontWeight="Black"/>
+                                            <Label Content="{Binding Path_frame}" FontSize="14" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
 
+                                <ListView.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal" Background="Transparent"/>
+                                    </ItemsPanelTemplate>
+                                </ListView.ItemsPanel>
                             </ListView>
                           
                         </StackPanel>

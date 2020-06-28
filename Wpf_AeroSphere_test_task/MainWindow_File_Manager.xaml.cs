@@ -32,10 +32,10 @@ namespace Wpf_AeroSphere_test_task
         public MainWindow()
         {
             InitializeComponent();
-
-            txt_box_Path.Text = "💻MyComputer ❯ ";
+           // PathBuilder.dir_down(list_view_path_frames, "FUCKFUCK");
             volumes = new Drives_list(list_view_disks);//экземпляр нашей файловой системы  
             Check_current_drive_is_online(); //метод проверяющий включен ли драйвер
+            list_view_files.Items.Refresh();
         }
 
         private void List_view_disks_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -47,7 +47,7 @@ namespace Wpf_AeroSphere_test_task
                 {
                     if (volumes.AllDrives[list_volumes.SelectedIndex].IsReady)
                     {
-                        volumes.Choose_disk(Grid_drives, Grid_files_and_folders, list_view_files, list_volumes, txt_box_Path, data_grid_disks_meta_data);
+                        volumes.Choose_disk(Grid_drives, Grid_files_and_folders, list_view_files, list_volumes, list_view_path_frames, data_grid_disks_meta_data);
                     }
                     else
                     {
@@ -108,7 +108,7 @@ namespace Wpf_AeroSphere_test_task
                     try
                     {
                         thread_get_metadata_of_folders_files.Abort();//остановим поток если пользователь решил перейти к другой папке
-                        volumes.Directory_down(list_view_files, txt_box_Path, full_path);
+                        volumes.Directory_down(list_view_files, list_view_path_frames, full_path);
                     }
                     catch (UnauthorizedAccessException)
                     {
@@ -168,7 +168,7 @@ namespace Wpf_AeroSphere_test_task
         private void Left_arrow_Button_Click(object sender, RoutedEventArgs e)
         {
             var curr_dir = volumes.CurrentDirName;
-            volumes.Directory_up(list_view_files, txt_box_Path);
+            volumes.Directory_up(list_view_files, list_view_path_frames);
             if (curr_dir != volumes.CurrentDirName)
             {
                 thread_get_metadata_of_folders_files.Abort();
@@ -329,7 +329,7 @@ namespace Wpf_AeroSphere_test_task
             }
             else;//поток не создан
 
-            volumes.Return_to_disk_choosing(Grid_files_and_folders, Grid_drives, txt_box_Path);
+            volumes.Return_to_disk_choosing(Grid_files_and_folders, Grid_drives, list_view_path_frames);
         }
 
         private void Search_TextBox_GotFocus(object sender, RoutedEventArgs e)
@@ -352,7 +352,7 @@ namespace Wpf_AeroSphere_test_task
             var searching_filename = txt_box_search.Text;
             if (volumes != null && volumes.CurrentDirName != null && txt_box_search.IsFocused)
             {
-                int i = 0;//TODO если пусто то надо вернуть все элементы на место
+                int i = 0;
                 foreach (var file in list_view_files.Items)
                 {
 
@@ -373,6 +373,12 @@ namespace Wpf_AeroSphere_test_task
                 
             }
             else;//негде искать
+        }
+
+        private void list_view_path_frames_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var list_paths = (ListView)sender;
+            MessageBox.Show("Индекс -" + list_paths.SelectedIndex.ToString());
         }
     }
 }

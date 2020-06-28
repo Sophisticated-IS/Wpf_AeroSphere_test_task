@@ -71,6 +71,7 @@
     <Compile Include="Drives_list.cs" />
     <Compile Include="Files_ico_Win32API.cs" />
     <Compile Include="File_ico_and_name.cs" />
+    <Compile Include="FragmentedPath.cs" />
     <Compile Include="IDirChangeable.cs" />
     <Compile Include="MainWindow_File_Manager.xaml.cs">
       <DependentUpon>MainWindow_File_Manager.xaml</DependentUpon>
