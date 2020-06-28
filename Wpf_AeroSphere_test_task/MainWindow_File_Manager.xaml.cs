@@ -32,7 +32,7 @@ namespace Wpf_AeroSphere_test_task
         public MainWindow()
         {
             InitializeComponent();
-           // PathBuilder.dir_down(list_view_path_frames, "FUCKFUCK");
+            // PathBuilder.dir_down(list_view_path_frames, "FUCKFUCK");
             volumes = new Drives_list(list_view_disks);//экземпляр нашей файловой системы  
             Check_current_drive_is_online(); //метод проверяющий включен ли драйвер
             list_view_files.Items.Refresh();
@@ -348,7 +348,7 @@ namespace Wpf_AeroSphere_test_task
 
         private void Search_TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            var txt_box_search = (TextBox)sender; 
+            var txt_box_search = (TextBox)sender;
             var searching_filename = txt_box_search.Text;
             if (volumes != null && volumes.CurrentDirName != null && txt_box_search.IsFocused)
             {
@@ -366,19 +366,24 @@ namespace Wpf_AeroSphere_test_task
                     {
                         file_ico_name.Visible_mode = Visibility.Collapsed;
                     }
-                   
+
                     i++;
-                }          
-                    list_view_files.Items.Refresh();       
-                
+                }
+                list_view_files.Items.Refresh();
+
             }
             else;//негде искать
         }
 
-        private void list_view_path_frames_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void List_view_path_frames_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            if (thread_get_metadata_of_folders_files != null)
+            {
+                thread_get_metadata_of_folders_files.Abort();
+            }
+            else;//не был создан
             var list_paths = (ListView)sender;
-            MessageBox.Show("Индекс -" + list_paths.SelectedIndex.ToString());
+            volumes.Directory_Back_Move_to(list_paths, list_view_files, list_paths.SelectedIndex);
         }
     }
 }

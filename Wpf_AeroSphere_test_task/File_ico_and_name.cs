@@ -14,6 +14,6 @@ namespace Wpf_AeroSphere_test_task
         public string Name { get; set; }
         public Visibility Visible_mode { get; set; } = Visibility.Visible;
     }
-   
+
 }
 

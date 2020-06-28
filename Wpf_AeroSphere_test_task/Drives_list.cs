@@ -11,7 +11,7 @@ using System.Windows.Media;
 namespace Wpf_AeroSphere_test_task
 {
 
-    class Drives_list //TODO: IDirChangeable
+    class Drives_list : IDirChangeable
     {
         struct Hardware_ico_and_info//хранит картинку и информацию о приводе
         {
@@ -24,11 +24,9 @@ namespace Wpf_AeroSphere_test_task
             Get_all_drives(list_view_devices);
         }
         private string currentDirName;//имя текущей директории
-        private string choosen_disk;
+        private string choosen_disk;//имя выбранного диска
         private bool is_disk_choosen = false;
-        private const string default_root_dir = "💻MyComputer ❯ ";//имя корневой папки
-        //private const string divide_symbol = "❯";//символ разделения каталогов
-        private const int disks_interrogation_delay = 3000;
+        private const int disks_interrogation_delay = 3000;//интервал опроса всех приводов в системе
         public string CurrentDirName
         {
             get
@@ -50,11 +48,11 @@ namespace Wpf_AeroSphere_test_task
             data_grid_meta_data.Visibility = Visibility.Collapsed;
             currentDirName = list_volumes.SelectedItem.GetType().GetProperty("Name").GetValue(list_volumes.SelectedItem, null).ToString();
             choosen_disk = currentDirName;
-            PathBuilder.dir_down(list_view_path_frames, currentDirName);
+            PathBuilder.Dir_down(list_view_path_frames, currentDirName);
             Switch_btw_grid_files_and_disks(grid_files_and_folders, grid_drives);
             Update_listview_folders(list_view_folders);
         }
-                 
+
         public void Return_to_disk_choosing(Grid grid_files_and_folders, Grid grid_drives, ListView list_view_path_frames)//возврат к каталогу со всеми дисками
         {
             if (is_disk_choosen)
@@ -70,7 +68,7 @@ namespace Wpf_AeroSphere_test_task
         public void Directory_down(ListView list_view_folders, ListView list_view_path_frames, string currentDirName)
         {
             this.currentDirName = currentDirName;
-            PathBuilder.dir_down(list_view_path_frames, Path.GetFileName(currentDirName));
+            PathBuilder.Dir_down(list_view_path_frames, Path.GetFileName(currentDirName));
             Update_listview_folders(list_view_folders);
         }
 
@@ -78,11 +76,22 @@ namespace Wpf_AeroSphere_test_task
         {
             if (currentDirName != null && currentDirName != choosen_disk)
             {
-                    PathBuilder.dir_up(list_view_path_frames);
-                    currentDirName = PathBuilder.Get_path(list_view_path_frames) ;       
+                PathBuilder.Dir_up(list_view_path_frames);//поднимемся по директории
+                currentDirName = PathBuilder.Get_path(list_view_path_frames);//установим новую
                 Update_listview_folders(list_view_folders);
             }
             else; //мы уже итак в этой директории
+
+        }
+
+        public void Directory_Back_Move_to(ListView list_paths,ListView list_files, int selectedIndex)//возвращаемся к конкретной папке
+        {
+            while (list_paths.Items.Count-1!= selectedIndex)
+            {
+                PathBuilder.Dir_up(list_paths);//поднимемся по директории
+            }
+            currentDirName = PathBuilder.Get_path(list_paths);//установим новую
+            Update_listview_folders(list_files);
 
         }
         private List<string> GetAllFiles()//возвращает список всех папок и файлов НЕ скрытых
@@ -152,7 +161,7 @@ namespace Wpf_AeroSphere_test_task
                             case DriveType.CDRom:
                                 img_and_info.hardware_ico = Convert_images.Convert_to_ImageSource(Properties.Resources.hd_cdrom.ToBitmap());
                                 break;
-                            
+
                             default:
                                 img_and_info.hardware_ico = Convert_images.Convert_to_ImageSource(Properties.Resources.question_shield.ToBitmap());
                                 break;
@@ -211,15 +220,15 @@ namespace Wpf_AeroSphere_test_task
 
         }
 
-        private void Update_listview_folders(ListView list_view_folders)//обновляет список с папками и файлами
+        private void Update_listview_folders(ListView list_view_files)//обновляет список с папками и файлами
         {
-            list_view_folders.Items.Clear();
-            foreach (var item in from filepath in GetAllFiles() select Path.GetFileName(filepath))
+            list_view_files.Items.Clear();
+            foreach (var file in from filepath in GetAllFiles() select Path.GetFileName(filepath))
             {
                 try
                 {
-                    Icon extractedIcon = Files_ico_Win32API.GetIcon(Path.Combine(currentDirName, item), true);
-                    list_view_folders.Items.Add(new File_ico_and_name { Name = item, Ico = Convert_images.Convert_to_ImageSource(extractedIcon.ToBitmap()) });
+                    Icon extractedIcon = Files_ico_Win32API.GetIcon(Path.Combine(currentDirName, file), true);
+                    list_view_files.Items.Add(new File_ico_and_name { Name = file, Ico = Convert_images.Convert_to_ImageSource(extractedIcon.ToBitmap()) });
                 }
                 catch (Exception ex)
                 {
