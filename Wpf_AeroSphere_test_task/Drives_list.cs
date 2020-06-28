@@ -155,6 +155,15 @@ namespace Wpf_AeroSphere_test_task
                             case DriveType.Removable:
                                 img_and_info.hardware_ico = Convert_images.Convert_to_ImageSource(Properties.Resources.hp_flash_drive.ToBitmap());
                                 break;
+
+                            case DriveType.Network:
+                                img_and_info.hardware_ico = Convert_images.Convert_to_ImageSource(Properties.Resources.network_connection_control_panel.ToBitmap());
+                                break;
+
+                            case DriveType.CDRom:
+                                img_and_info.hardware_ico = Convert_images.Convert_to_ImageSource(Properties.Resources.hd_cdrom.ToBitmap());
+                                break;
+                            
                             default:
                                 img_and_info.hardware_ico = Convert_images.Convert_to_ImageSource(Properties.Resources.question_shield.ToBitmap());
                                 break;

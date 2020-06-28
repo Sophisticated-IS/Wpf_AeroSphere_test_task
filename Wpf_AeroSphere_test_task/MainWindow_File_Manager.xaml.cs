@@ -348,9 +348,9 @@ namespace Wpf_AeroSphere_test_task
 
         private void Search_TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            var txt_box_search = (TextBox)sender;
+            var txt_box_search = (TextBox)sender; 
             var searching_filename = txt_box_search.Text;
-            if (volumes != null && volumes.CurrentDirName != null && searching_filename!= search_message)// TODO: костыль ИСПРАВИТЬ
+            if (volumes != null && volumes.CurrentDirName != null && txt_box_search.IsFocused)
             {
                 int i = 0;//TODO если пусто то надо вернуть все элементы на место
                 foreach (var file in list_view_files.Items)

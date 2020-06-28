@@ -78,6 +78,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PathBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -114,6 +115,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\question_shield.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\hd_cdrom.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\network_connection_control_panel.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

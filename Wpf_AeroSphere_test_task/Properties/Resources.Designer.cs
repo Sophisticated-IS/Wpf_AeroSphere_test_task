@@ -63,6 +63,16 @@ namespace Wpf_AeroSphere_test_task.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        internal static System.Drawing.Icon hd_cdrom {
+            get {
+                object obj = ResourceManager.GetObject("hd_cdrom", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         internal static System.Drawing.Icon hp_flash_drive {
             get {
                 object obj = ResourceManager.GetObject("hp_flash_drive", resourceCulture);
@@ -76,6 +86,16 @@ namespace Wpf_AeroSphere_test_task.Properties {
         internal static System.Drawing.Icon hp_hdd {
             get {
                 object obj = ResourceManager.GetObject("hp_hdd", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon network_connection_control_panel {
+            get {
+                object obj = ResourceManager.GetObject("network_connection_control_panel", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }

@@ -118,11 +118,17 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="hd_cdrom" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\hd_cdrom.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="hp_flash_drive" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\hp_flash_drive.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="hp_hdd" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\hp_hdd.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="network_connection_control_panel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\network_connection_control_panel.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="question_shield" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\question_shield.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

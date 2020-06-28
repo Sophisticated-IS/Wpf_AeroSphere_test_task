@@ -75,7 +75,22 @@
                     </Grid>
 
                     <Grid Grid.Column="1">
-                        <TextBox Name="txt_box_Path" HorizontalAlignment="Stretch" Style="{StaticResource BigFont_TextBlock_Style}" FontStyle="Italic" IsReadOnly="True">💻MyComputer</TextBox>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox Name="txt_box_Path" BorderThickness="0" HorizontalAlignment="Stretch" Style="{StaticResource BigFont_TextBlock_Style}" FontStyle="Italic" IsReadOnly="True">💻MyComputer</TextBox>
+                            
+                            <ListView Background="Gray" >
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                       
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+
+                            </ListView>
+                          
+                        </StackPanel>
+                       
                     </Grid>
                 </Grid>
 
