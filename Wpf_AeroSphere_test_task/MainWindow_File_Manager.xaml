@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Wpf_AeroSphere_test_task"
         
         mc:Ignorable="d"
-        Title="File Manager AeroSphere" Height="450" Width="800">
+        Title="File Manager AeroSphere" Height="450" Width="800" Closing="Window_Closing">
 
     <Window.Resources>
         <Style x:Key="BigFont_TextBlock_Style">
@@ -158,8 +158,8 @@
 
             <GridSplitter Grid.Column="1" ShowsPreview="False" Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="#A66800"/>
 
-            <Grid Grid.Column="2" Background="Gray">
-                <DataGrid x:Name="data_grid_files_meta_data" Visibility="Collapsed">
+            <Grid Grid.Column="2" Background="Gray" MaxWidth="400">
+                <DataGrid x:Name="data_grid_files_meta_data"  Visibility="Collapsed">
                     
                     <DataGrid.Columns>
                         <DataGridTextColumn Header= "Attribute" Binding="{Binding Name,Mode=OneWay }" IsReadOnly="True"/>
