@@ -52,15 +52,14 @@ namespace Wpf_AeroSphere_test_task
             choosen_disk = currentDirName;
             txt_box_Path.Text = $"{default_root_dir}{currentDirName}";
             Switch_btw_grid_files_and_disks(grid_files_and_folders, grid_drives);
-            Update_listview_folders(list_view_folders);            
+            Update_listview_folders(list_view_folders);
         }
 
-        public void Return_to_disk_choosing(Grid grid_files_and_folders, Grid grid_drives, ListView list_view_files, TextBox txt_box_Path, DataGrid data_grid_meta_data)//возврат к каталогу со всеми дисками
+        public void Return_to_disk_choosing(Grid grid_files_and_folders, Grid grid_drives, TextBox txt_box_Path)//возврат к каталогу со всеми дисками
         {
             if (is_disk_choosen)
             {
                 is_disk_choosen = false;
-                data_grid_meta_data.Visibility = Visibility.Visible;
                 txt_box_Path.Text = default_root_dir;
                 Switch_btw_grid_files_and_disks(grid_files_and_folders, grid_drives);
             }
@@ -79,7 +78,7 @@ namespace Wpf_AeroSphere_test_task
             if (currentDirName != null && currentDirName != choosen_disk)
             {
                 var current_folder = Path.GetFileName(currentDirName);
-                
+
                 currentDirName = currentDirName.TrimEnd(current_folder.ToCharArray());
                 if (CurrentDirName == choosen_disk)
                 {
@@ -89,7 +88,7 @@ namespace Wpf_AeroSphere_test_task
                 {
                     currentDirName = currentDirName.TrimEnd('\\');
                 }
-                
+
                 txt_box_Path.Text = default_root_dir + currentDirName;
                 Update_listview_folders(list_view_folders);
             }
@@ -123,7 +122,7 @@ namespace Wpf_AeroSphere_test_task
                     {
                         if (new_drives[i].Name == AllDrives[i].Name && new_drives[i].DriveType == AllDrives[i].DriveType)
                         {
-
+                            //у драйверов совпадает имя и тип значит они равны
                         }
                         else
                         {
@@ -226,9 +225,9 @@ namespace Wpf_AeroSphere_test_task
                 catch (Exception ex)
                 {
                     MessageBox.Show($"Не удалось загрузить папку так как в ней есть системные файлы - {ex}");
-                    break;                    
+                    break;
                 }
-                
+
             }
         }
     }

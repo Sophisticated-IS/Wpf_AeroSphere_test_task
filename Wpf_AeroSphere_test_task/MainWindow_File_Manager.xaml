@@ -12,7 +12,7 @@
         <Style x:Key="BigFont_TextBlock_Style">
             <Setter Property="ItemsControl.FontFamily" Value="Times New Roman"/>
             <Setter Property="ItemsControl.FontWeight" Value="Bold"/>
-            <Setter Property="ItemsControl.FontSize"   Value="18"/>
+            <Setter Property="ItemsControl.FontSize"   Value="22"/>
             <!--<Setter Property="ItemsControl.Padding" Value="0,2,0,0"/>-->
         </Style>
 
@@ -32,18 +32,19 @@
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition MaxHeight="25"/>
+            <RowDefinition  Height="auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0" Background="#FFFFDBA1">
             <DockPanel LastChildFill="True">
                 <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
-                    <Button Style="{StaticResource Button_Arrows_Style}" Click="Left_arrow_Button_Click">
+                    <Button Style="{StaticResource Button_Arrows_Style}" ToolTip="Вернуться на директорию назад" FontSize="25" Click="Left_arrow_Button_Click">
                         🡄
                     </Button>
-                    <Button Margin="5,0,0,0" Style="{StaticResource Button_Arrows_Style}">
-                        🡆
+                    <Button Style="{StaticResource Button_Arrows_Style}" Foreground="black" FontSize="25" ToolTip="Вернуться к выбору диска" 
+                            FontWeight="Black"  Click="Return_to_disk_choosing_Button_Click">
+                        ⬆
                     </Button>
                 </StackPanel>
 
@@ -118,7 +119,7 @@
                 </GroupBox>
             </Grid>
 
-            <GridSplitter Grid.Column="1" ShowsPreview="False" Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="#A66800"/>
+            <GridSplitter Grid.Column="1" ToolTip="Вы можете регулировать размеры левого и правого окна" ShowsPreview="False" Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="#A66800"/>
 
             <Grid Grid.Column="2" Background="Gray">
                 <DataGrid x:Name="data_grid_disks_meta_data" Visibility="Collapsed">
@@ -156,7 +157,7 @@
 
             </Grid>
 
-            <GridSplitter Grid.Column="1" ShowsPreview="False" Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="#A66800"/>
+            <GridSplitter Grid.Column="1" ToolTip="Вы можете регулировать размеры левого и правого окна" ShowsPreview="False" Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="#A66800"/>
 
             <Grid Grid.Column="2" Background="Gray" MaxWidth="400">
                 <DataGrid x:Name="data_grid_files_meta_data"  Visibility="Collapsed">

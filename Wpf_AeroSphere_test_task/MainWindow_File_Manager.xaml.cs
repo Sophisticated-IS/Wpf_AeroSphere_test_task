@@ -27,12 +27,14 @@ namespace Wpf_AeroSphere_test_task
         Thread thread_get_metadata_of_folders_files;//поток для получения данных о папках и файлаз
         int files_counter = 0;//для полсчета кол-ва файлов в папке
         long size_folder_in_byte = 0;//для подсчета размера папки с файлами
+        string Previos_file_name;//имя предыдущего выбранного файла
         public MainWindow()
         {
             InitializeComponent();
 
             txt_box_Path.Text = "💻MyComputer ❯ ";
-            volumes = new Drives_list(list_view_disks);//экземпляр нашей файловой системы                            
+            volumes = new Drives_list(list_view_disks);//экземпляр нашей файловой системы  
+            Check_current_drive_is_online(); //метод проверяющий включен ли драйвер
         }
 
         private void List_view_disks_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -134,28 +136,60 @@ namespace Wpf_AeroSphere_test_task
             thread_get_metadata_of_folders_files.Start(sender);
 
         }
+
+        private async void Check_current_drive_is_online()
+        {
+            await Task.Run(() =>
+            {
+                while (true)
+                {
+                    if (volumes.CurrentDirName != null)
+                    {
+                        DriveInfo driveInfo = new DriveInfo(Path.GetPathRoot(volumes.CurrentDirName));
+
+                        if (driveInfo.IsReady == false)
+                        {
+                            Dispatcher.Invoke(() => //выкинем пользователя из удаленного устройства/драйвера
+                            {
+                                Return_to_disk_choosing_Button_Click(this, null);
+                            });
+                        }
+                        else;//все в порядке 
+
+                    }
+                    else;//пользователь еще не выбрал диск
+
+                    Thread.Sleep(300);
+                }
+                
+            });
+        }
         private void Left_arrow_Button_Click(object sender, RoutedEventArgs e)
         {
+            var curr_dir = volumes.CurrentDirName;
             volumes.Directory_up(list_view_files, txt_box_Path);
+            if (curr_dir != volumes.CurrentDirName)
+            {
+                thread_get_metadata_of_folders_files.Abort();
+            }
+            else;//мы в корневой директории
         }
 
-        string Previos_file_name;
         private void List_view_files_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-
             ListView list_files = (ListView)sender;
             if (list_files.SelectedValue != null)
             {
                 data_grid_files_meta_data.Visibility = Visibility.Visible;
-
                 File_ico_and_name file_ico_name = (File_ico_and_name)list_files.SelectedValue;
                 var path_dir = Path.Combine(volumes.CurrentDirName, file_ico_name.Name);
                 FileInfo fileinfo = new FileInfo(path_dir);
 
-                if ((fileinfo.Attributes & FileAttributes.Directory) == FileAttributes.Directory)
+                if (Previos_file_name != file_ico_name.Name)
                 {
-                    if (Previos_file_name != file_ico_name.Name)
+                    if ((fileinfo.Attributes & FileAttributes.Directory) == FileAttributes.Directory)
                     {
+
                         if (thread_get_metadata_of_folders_files != null)
                         {
                             thread_get_metadata_of_folders_files.Abort();
@@ -171,59 +205,34 @@ namespace Wpf_AeroSphere_test_task
                         files_counter = 0;
                         size_folder_in_byte = 0;
                         thread_get_metadata_of_folders_files = new Thread(new ParameterizedThreadStart(AddFiles));
-                        thread_get_metadata_of_folders_files.Start(path_dir);                     
+                        thread_get_metadata_of_folders_files.Start(path_dir);
+
+
                     }
-                    else
+                    else//это не директория а файл
                     {
-                        //мы уже итак вычисляем или вычислили для этой папки размер и кол-во файлов
+                        data_grid_files_meta_data.Items.Clear();
+
+                        foreach (var file_prop in fileinfo.GetType().GetProperties())
+                        {
+                            if (file_prop.Name == "Length")
+                            {
+                                data_grid_files_meta_data.Items.Add(new { Name = file_prop.Name, Value = $"{(long)file_prop.GetValue(fileinfo) >> 10} Кб" });
+                            }
+                            else
+                            {
+                                data_grid_files_meta_data.Items.Add(new { Name = file_prop.Name, Value = file_prop.GetValue(fileinfo) });
+                            }
+
+                        }
                     }
-                    
+                    Previos_file_name = file_ico_name.Name;
                 }
-                else//это не директория а файл
+                else
                 {
-                    data_grid_files_meta_data.Items.Clear();
-
-                    Debug.WriteLine(fileinfo.Name);
-                    Debug.WriteLine(fileinfo.FullName);
-                    Debug.WriteLine(fileinfo.Extension);
-                    Debug.WriteLine(fileinfo.DirectoryName);
-                    Debug.WriteLine(fileinfo.Attributes);
-                    Debug.WriteLine(fileinfo.CreationTime);
-                    Debug.WriteLine(fileinfo.LastAccessTime);
-                    Debug.WriteLine(fileinfo.LastWriteTime);
-                    Debug.WriteLine(fileinfo.Length);
-
-#if DEBUG
-                    var shellAppType = Type.GetTypeFromProgID("Shell.Application"); //инициализация PowerShell
-                    dynamic shell = Activator.CreateInstance(shellAppType);
-                    var dir_info = new DirectoryInfo(path_dir);                   
-                    var dir = Path.GetDirectoryName(path_dir);
-                    var file = Path.GetFileName(path_dir);
-
-                    var folder = shell.NameSpace(dir);
-                    var folderItem = folder.ParseName(file);
-
-                    var names =
-                        (from idx in Enumerable.Range(0, short.MaxValue)
-                         let key = (string)folder.GetDetailsOf(null, idx) // пришлось вставить cast
-                             where !string.IsNullOrEmpty(key)
-                         select (idx, key)).ToDictionary(p => p.idx, p => p.key);
-
-                    var properties =
-                        (from idx in names.Keys
-                         orderby idx
-                         let value = (string)folder.GetDetailsOf(folderItem, idx) // пришлось вставить cast
-                             where !string.IsNullOrEmpty(value)
-                         select (name: names[idx], value)).ToList();
-
-                    foreach (var (name, value) in properties)
-                    {
-                        data_grid_files_meta_data.Items.Add(new { Name = name, Value = value });
-                    }
-#endif
-
+                    //мы уже итак вычисляем или вычислили для этого файла метаданные 
                 }
-                Previos_file_name = file_ico_name.Name;
+
             }
             else;//клик был не на элемент
 
@@ -235,7 +244,9 @@ namespace Wpf_AeroSphere_test_task
             string path = (string)_path;
             try
             {
-                Directory.GetFiles(path)
+                if (Directory.Exists(path))
+                {
+                    Directory.GetFiles(path)
                     .ToList()
                     .ForEach(s =>
                     {
@@ -251,9 +262,11 @@ namespace Wpf_AeroSphere_test_task
                         }
                     });
 
-                Directory.GetDirectories(path)
-                    .ToList()
-                    .ForEach(s => AddFiles(s));
+                    Directory.GetDirectories(path)
+                   .ToList()
+                   .ForEach(s => AddFiles(s));
+                }
+                else;//директории нет
             }
             catch (UnauthorizedAccessException)
             {
@@ -299,7 +312,23 @@ namespace Wpf_AeroSphere_test_task
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            thread_get_metadata_of_folders_files.Abort();
+            if (thread_get_metadata_of_folders_files != null)
+            {
+                thread_get_metadata_of_folders_files.Abort();
+            }
+            else;//поток и не создавался
+
+        }
+
+        private void Return_to_disk_choosing_Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (thread_get_metadata_of_folders_files != null)
+            {
+                thread_get_metadata_of_folders_files.Abort();
+            }
+            else;//поток не создан
+
+            volumes.Return_to_disk_choosing(Grid_files_and_folders, Grid_drives, txt_box_Path);
         }
     }
 }
