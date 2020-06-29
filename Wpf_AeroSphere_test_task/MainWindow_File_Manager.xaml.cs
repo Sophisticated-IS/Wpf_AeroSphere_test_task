@@ -179,6 +179,7 @@ namespace Wpf_AeroSphere_test_task
 
         private void List_view_files_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+
             ListView list_files = (ListView)sender;
             if (list_files.SelectedValue != null)
             {
@@ -189,10 +190,12 @@ namespace Wpf_AeroSphere_test_task
 
                 if (Previos_file_name != file_ico_name.Name)
                 {
+
                     if (thread_get_metadata_of_folders_files != null)
                     {
                         thread_get_metadata_of_folders_files.Abort();
-                    }                    
+
+                    }
                     else;//поток еще ни разу не был создан и вызван
 
                     if ((fileinfo.Attributes & FileAttributes.Directory) == FileAttributes.Directory)
@@ -206,22 +209,27 @@ namespace Wpf_AeroSphere_test_task
                     }
                     else//это не директория а файл
                     {
-                        data_grid_files_meta_data.Items.Clear();
 
-                        foreach (var file_prop in fileinfo.GetType().GetProperties())
+                        Dispatcher.Invoke(() =>//Добавлено из -за вычисления размера файла в background, чтобы не перетирались значения в datagrid
                         {
-                            if (file_prop.Name == "Length")
-                            {
-                                data_grid_files_meta_data.Items.Add(new { Name = file_prop.Name, Value = $"{(long)file_prop.GetValue(fileinfo) >> 10} Кб" });
-                            }
-                            else
-                            {
-                                data_grid_files_meta_data.Items.Add(new { Name = file_prop.Name, Value = file_prop.GetValue(fileinfo) });
-                            }
+                            data_grid_files_meta_data.Items.Clear();
 
-                        }
+                            foreach (var file_prop in fileinfo.GetType().GetProperties())
+                            {
+                                if (file_prop.Name == "Length")
+                                {
+                                    data_grid_files_meta_data.Items.Add(new { Name = file_prop.Name, Value = $"{(long)file_prop.GetValue(fileinfo) >> 10} Кб" });
+                                }
+                                else
+                                {
+                                    data_grid_files_meta_data.Items.Add(new { Name = file_prop.Name, Value = file_prop.GetValue(fileinfo) });
+                                }
+
+                            }
+                        }, DispatcherPriority.ContextIdle);
                     }
                     Previos_file_name = file_ico_name.Name;
+
                 }
                 else
                 {
@@ -306,8 +314,6 @@ namespace Wpf_AeroSphere_test_task
                 //пропустим папки к которым нет доступа
             }
 
-            //TODO: рефакторинг и избавление от лишнего кода и повторяющегося
-            //TODO: Проверки на удаление папок и файлов 
             Get_folder_size_and_measure_units(out string units_name, size_folder_in_byte, out double size_in_concrete_units);
             Dispatcher.Invoke(() =>
             {
@@ -315,6 +321,8 @@ namespace Wpf_AeroSphere_test_task
                 data_grid_files_meta_data.Items.Add(new { Name = "Количество файлов ", Value = files_counter });
                 data_grid_files_meta_data.Items.Add(new { Name = units_name, Value = size_in_concrete_units });
             }, DispatcherPriority.Background);
+
+
 
         }
 
