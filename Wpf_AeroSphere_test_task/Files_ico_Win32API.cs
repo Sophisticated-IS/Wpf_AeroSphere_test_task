@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Wpf_AeroSphere_test_task
 {
-    static class Files_ico_Win32API
+    static class Files_ico_Win32API//для получения иконок файлов в Windows
     {
         [StructLayout(LayoutKind.Sequential)]
         public struct SHFILEINFO
@@ -35,11 +35,11 @@ namespace Wpf_AeroSphere_test_task
 
         [DllImport("User32.dll")]
         private static extern int DestroyIcon(IntPtr hIcon);
-        public static Icon GetIcon(string path, bool bolshaya)
+        public static Icon GetIcon(string path, bool is_big)//получить иконку
         {
             SHFILEINFO shinfo = new SHFILEINFO();
 
-            if (!bolshaya)
+            if (!is_big)
             {
                 SHGetFileInfo(path, 0, ref shinfo,
                 (uint)Marshal.SizeOf(shinfo),

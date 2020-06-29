@@ -25,7 +25,7 @@ namespace Wpf_AeroSphere_test_task
         }
         private string currentDirName;//имя текущей директории
         private string choosen_disk;//имя выбранного диска
-        private bool is_disk_choosen = false;
+        private bool is_disk_choosen = false;//был ли выбран диск
         private const int disks_interrogation_delay = 3000;//интервал опроса всех приводов в системе
         public string CurrentDirName
         {
@@ -65,14 +65,14 @@ namespace Wpf_AeroSphere_test_task
             else;//мы итак в директории выборе диска находимся
         }
 
-        public void Directory_down(ListView list_view_folders, ListView list_view_path_frames, string currentDirName)
+        public void Directory_down(ListView list_view_folders, ListView list_view_path_frames, string currentDirName)//переход внутрь катлога
         {
             this.currentDirName = currentDirName;
             PathBuilder.Dir_down(list_view_path_frames, Path.GetFileName(currentDirName));
             Update_listview_folders(list_view_folders);
         }
 
-        public void Directory_up(ListView list_view_folders, ListView list_view_path_frames)
+        public void Directory_up(ListView list_view_folders, ListView list_view_path_frames)//выход из каталога на папку выше
         {
             if (currentDirName != null && currentDirName != choosen_disk)
             {
@@ -94,7 +94,7 @@ namespace Wpf_AeroSphere_test_task
             Update_listview_folders(list_files);
 
         }
-        private List<string> GetAllFiles()//возвращает список всех папок и файлов НЕ скрытых
+        private List<string> Get_all_files()//возвращает список всех папок и файлов НЕ скрытых
         {
             if (Directory.Exists(currentDirName))
             {
@@ -243,7 +243,7 @@ namespace Wpf_AeroSphere_test_task
         public void Update_listview_folders(ListView list_view_files)//обновляет список с папками и файлами
         {
             list_view_files.Items.Clear();
-            foreach (var file in from filepath in GetAllFiles() select Path.GetFileName(filepath))
+            foreach (var file in from filepath in Get_all_files() select Path.GetFileName(filepath))
             {
                 try
                 {

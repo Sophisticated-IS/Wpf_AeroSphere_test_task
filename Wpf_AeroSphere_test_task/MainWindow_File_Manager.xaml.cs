@@ -140,14 +140,7 @@ namespace Wpf_AeroSphere_test_task
             else;//элемент не выбран или его нет
         }
 
-        private void Get_metadata(object sender)
-        {
-            thread_get_metadata_of_folders_files = new Thread(new ParameterizedThreadStart(Get_metadata));
-            thread_get_metadata_of_folders_files.Start(sender);
-
-        }
-
-        private async void Check_current_drive_is_online()
+        private async void Check_current_drive_is_online()//проверяет все ли приводы включены,и если текущий привод отключился, то возвращает пользователя к выбору привода
         {
             await Task.Run(() =>
             {
@@ -247,7 +240,7 @@ namespace Wpf_AeroSphere_test_task
         }
 
         /// <summary>
-        /// Получает размер папки в байтах, и конвертирует в кб, Мб, Гб, если это возможно
+        /// Получает размер папки в байтах, и конвертирует в Кб, Мб, Гб, если это возможно
         /// </summary>
         /// <param name="mesure_units">единицы измерения Гб,Мб, Кб,байт</param>
         /// <param name="size"> исходный размер в байтах</param>
@@ -321,9 +314,7 @@ namespace Wpf_AeroSphere_test_task
 
             //TODO: рефакторинг и избавление от лишнего кода и повторяющегося
             //TODO: Проверки на удаление папок и файлов 
-            double size_in_concrete_units = 0;
-            string units_name = "";
-            Get_folder_size_and_measure_units(out units_name, size_folder_in_byte, out size_in_concrete_units);
+            Get_folder_size_and_measure_units(out string units_name, size_folder_in_byte, out double size_in_concrete_units);
             Dispatcher.Invoke(() =>
             {
                 data_grid_files_meta_data.Items.Clear();
