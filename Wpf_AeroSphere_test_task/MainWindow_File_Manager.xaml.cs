@@ -400,5 +400,10 @@ namespace Wpf_AeroSphere_test_task
             var list_paths = (ListView)sender;
             volumes.Directory_move_to_folder(list_paths, list_view_files, list_paths.SelectedIndex);
         }
+
+        private void Update_MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            volumes.Update_listview_folders(list_view_files);
+        }
     }
 }

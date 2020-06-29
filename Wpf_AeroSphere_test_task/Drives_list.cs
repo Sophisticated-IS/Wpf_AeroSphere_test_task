@@ -128,7 +128,7 @@ namespace Wpf_AeroSphere_test_task
             }
 
         }
-        private void Exit_to_existing_dir(ListView list_paths)
+        private void Exit_to_existing_dir(ListView list_paths)//переход к существующей директории от удаленной директории,в которой находился пользователь
         {
             Get_all_files();//дойдем до существующей папки
             while (PathBuilder.Get_path(list_paths) != currentDirName)

@@ -187,6 +187,11 @@
                             </Style>
                         </ListView.ItemContainerStyle>
                     </ListView>
+                    <GroupBox.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Обновить" Click="Update_MenuItem_Click"/>
+                        </ContextMenu>
+                    </GroupBox.ContextMenu>
                 </GroupBox>
 
 
