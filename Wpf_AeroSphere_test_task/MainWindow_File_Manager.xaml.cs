@@ -207,8 +207,6 @@ namespace Wpf_AeroSphere_test_task
                         size_folder_in_byte = 0;
                         thread_get_metadata_of_folders_files = new Thread(new ParameterizedThreadStart(AddFiles));
                         thread_get_metadata_of_folders_files.Start(path_dir);
-
-
                     }
                     else//это не директория а файл
                     {
@@ -273,6 +271,9 @@ namespace Wpf_AeroSphere_test_task
             {
                 //пропустим папки к которым нет доступа
             }
+            //TODO: УМЕНЬШИТЬ ЧАСТОТУ ОБНОВЛЕНИЯ UI
+            //TODO: рефакторинг и избавление от лишнего кода и повторяющегося
+            //TODO: Проверки на удаление папок и файлов 
             Dispatcher.Invoke(() =>//обновим посчитанное кол-во файлов и размер
             {
                 data_grid_files_meta_data.Items.Clear();

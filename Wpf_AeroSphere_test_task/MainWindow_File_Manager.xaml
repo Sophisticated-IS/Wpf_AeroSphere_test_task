@@ -75,7 +75,7 @@
                                 </TextBlock.Background>                  
                             Path: 📁  <Run Foreground="Gray"> ❯ </Run>
                             </TextBlock>
-                            <TextBox  BorderThickness="0" HorizontalAlignment="Stretch" Style="{StaticResource BigFont_TextBlock_Style}" FontSize="18" Padding="0,8,0,0" FontStyle="Italic" 
+                            <TextBox  BorderThickness="0" Background="AliceBlue" HorizontalAlignment="Stretch" Style="{StaticResource BigFont_TextBlock_Style}" FontSize="18" Padding="0,8,0,0" FontStyle="Italic" 
                                       IsReadOnly="True" Text="💻MyComputer"/>
                         </StackPanel>
                      
@@ -83,10 +83,10 @@
                     </Grid>
 
                     <Grid Grid.Column="1">
-                        <StackPanel Orientation="Horizontal">
+                       
                             
-                            <ListView x:Name="list_view_path_frames" SelectionMode="Single" ScrollViewer.VerticalScrollBarVisibility="Disabled" 
-                                      ScrollViewer.HorizontalScrollBarVisibility="Auto" BorderThickness="0" MouseDoubleClick="List_view_path_frames_MouseDoubleClick">
+                            <ListView x:Name="list_view_path_frames" SelectionMode="Single" ScrollViewer.VerticalScrollBarVisibility="Disabled" BorderThickness="3" BorderBrush="Black" 
+                                      ScrollViewer.HorizontalScrollBarVisibility="Auto"  MouseDoubleClick="List_view_path_frames_MouseDoubleClick">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" ToolTip="Двойной клик, чтобы перейти к папке">
@@ -102,7 +102,7 @@
                                     </ItemsPanelTemplate>
                                 </ListView.ItemsPanel>
                             </ListView>
-                        </StackPanel>
+                      
                        
                     </Grid>
                 </Grid>
