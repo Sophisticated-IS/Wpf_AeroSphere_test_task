@@ -10,9 +10,9 @@ namespace Wpf_AeroSphere_test_task
 {
     class File_ico_and_name
     {
-        public ImageSource Ico { get; set; }
-        public string Name { get; set; }
-        public Visibility Visible_mode { get; set; } = Visibility.Visible;
+        public ImageSource Ico { get; set; }//иконка файла или папки
+        public string Name { get; set; }//название файла или папки
+        public Visibility Visible_mode { get; set; } = Visibility.Visible;//виден ли элемент в UI
     }
 
 }

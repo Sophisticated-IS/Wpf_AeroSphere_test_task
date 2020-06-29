@@ -14,7 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-
+using System.Windows.Threading;
 
 namespace Wpf_AeroSphere_test_task
 {
@@ -32,10 +32,8 @@ namespace Wpf_AeroSphere_test_task
         public MainWindow()
         {
             InitializeComponent();
-            // PathBuilder.dir_down(list_view_path_frames, "FUCKFUCK");
             volumes = new Drives_list(list_view_disks);//экземпляр нашей файловой системы  
             Check_current_drive_is_online(); //метод проверяющий включен ли драйвер
-            list_view_files.Items.Refresh();
         }
 
         private void List_view_disks_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -83,6 +81,7 @@ namespace Wpf_AeroSphere_test_task
             }
         }
 
+
         private void List_view_files_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var list_folders_and_files = (ListView)sender;
@@ -91,42 +90,52 @@ namespace Wpf_AeroSphere_test_task
                 File_ico_and_name file_ico_name = (File_ico_and_name)list_folders_and_files.SelectedValue;
                 string doc_or_folder_name = file_ico_name.Name;
                 var full_path = Path.Combine(volumes.CurrentDirName, doc_or_folder_name);
-                FileAttributes fileAttr = File.GetAttributes(full_path);
 
-                bool isFile;
-                if ((fileAttr & FileAttributes.Directory) == FileAttributes.Directory)
+                if (Directory.Exists(full_path))
                 {
-                    isFile = false;
+                    FileAttributes fileAttr = File.GetAttributes(full_path);
+                    bool isFile;
+                    if ((fileAttr & FileAttributes.Directory) == FileAttributes.Directory)
+                    {
+                        isFile = false;
+                    }
+                    else
+                    {
+                        isFile = true;
+                    }
+
+                    if (!string.IsNullOrEmpty(doc_or_folder_name) && !isFile)
+                    {
+                        try
+                        {
+                            thread_get_metadata_of_folders_files.Abort();//остановим поток если пользователь решил перейти к другой папке
+                            volumes.Directory_down(list_view_files, list_view_path_frames, full_path);
+                        }
+                        catch (UnauthorizedAccessException)
+                        {
+                            MessageBox.Show("Вам отказано в доступе к данной папке!");
+                        }
+                    }
+                    else//значит это файл 
+                    {
+                        try
+                        {
+                            Process.Start(full_path);
+                        }
+                        catch (System.ComponentModel.Win32Exception)//не удалось найти приложение для данного файла
+                        {
+                            Process.Start(new ProcessStartInfo { FileName = "explorer.exe", Arguments = full_path });//вызовем открыть с помощью и пусть пользователь выберет
+                        }
+
+                    }
                 }
                 else
                 {
-                    isFile = true;
+                    volumes.Update_listview_folders(list_view_files);
+                    MessageBox.Show($"Файл был удален по пути {full_path}!");
                 }
 
-                if (!string.IsNullOrEmpty(doc_or_folder_name) && !isFile)
-                {
-                    try
-                    {
-                        thread_get_metadata_of_folders_files.Abort();//остановим поток если пользователь решил перейти к другой папке
-                        volumes.Directory_down(list_view_files, list_view_path_frames, full_path);
-                    }
-                    catch (UnauthorizedAccessException)
-                    {
-                        MessageBox.Show("Вам отказано в доступе к данной папке!");
-                    }
-                }
-                else//значит это файл 
-                {
-                    try
-                    {
-                        Process.Start(full_path);
-                    }
-                    catch (System.ComponentModel.Win32Exception)//не удалось найти приложение для данного файла
-                    {
-                        Process.Start(new ProcessStartInfo { FileName = "explorer.exe", Arguments = full_path });//вызовем открыть с помощью и пусть пользователь выберет
-                    }
 
-                }
             }
             else;//элемент не выбран или его нет
         }
@@ -160,7 +169,7 @@ namespace Wpf_AeroSphere_test_task
                     }
                     else;//пользователь еще не выбрал диск
 
-                    Thread.Sleep(300);
+                    Thread.Sleep(100);
                 }
 
             });
@@ -205,7 +214,7 @@ namespace Wpf_AeroSphere_test_task
                         //обнулим счетчики и вызовем поток для новой выбранной папки
                         files_counter = 0;
                         size_folder_in_byte = 0;
-                        thread_get_metadata_of_folders_files = new Thread(new ParameterizedThreadStart(AddFiles));
+                        thread_get_metadata_of_folders_files = new Thread(new ParameterizedThreadStart(Count_folder_size));
                         thread_get_metadata_of_folders_files.Start(path_dir);
                     }
                     else//это не директория а файл
@@ -237,9 +246,47 @@ namespace Wpf_AeroSphere_test_task
 
         }
 
-        private void AddFiles(object _path)//рекурсивный метод обхода всех файлов и подкаталогов папки
+        /// <summary>
+        /// Получает размер папки в байтах, и конвертирует в кб, Мб, Гб, если это возможно
+        /// </summary>
+        /// <param name="mesure_units">единицы измерения Гб,Мб, Кб,байт</param>
+        /// <param name="size"> исходный размер в байтах</param>
+        /// <param name="size_result"> сконвертированный в конкретные единицы размер</param>
+        private void Get_folder_size_and_measure_units(out string mesure_units, long size, out double size_result)
         {
+            if (size >> 10 > 0)//значит файл весит хотя бы 1 кб
+            {
+                if (size >> 20 > 0)//значит размер файла весит хотя бы 1 МБ
+                {
+                    if (size >> 30 > 0)//значит размер файла весит хотя бы 1 ГБ
+                    {
+                        size_result = (double)size / (1024 * 1024 * 1024);
+                        size_result = Math.Round(size_result, 2);
+                        mesure_units = "Размер (Гб)";
+                    }
+                    else//Выводим в мегабайтах
+                    {
+                        size_result = (double)size / (1024 * 1024);
+                        size_result = Math.Round(size_result, 2);
+                        mesure_units = "Размер (Мб)";
+                    }
+                }
+                else//выводим в КБ
+                {
+                    size_result = (double)size_folder_in_byte / 1024;
+                    size_result = Math.Round(size_result, 2);
+                    mesure_units = "Размер (Кб)";
+                }
 
+            }
+            else//размер файла меньше 1 кб
+            {
+                size_result = size;
+                mesure_units = "Размер (байт)";
+            }
+        }
+        private void Count_folder_size(object _path)//рекурсивный метод обхода всех файлов и подкаталогов папки
+        {
             string path = (string)_path;
             try
             {
@@ -263,7 +310,7 @@ namespace Wpf_AeroSphere_test_task
 
                     Directory.GetDirectories(path)
                    .ToList()
-                   .ForEach(s => AddFiles(s));
+                   .ForEach(s => Count_folder_size(s));
                 }
                 else;//директории нет
             }
@@ -271,45 +318,19 @@ namespace Wpf_AeroSphere_test_task
             {
                 //пропустим папки к которым нет доступа
             }
-            //TODO: УМЕНЬШИТЬ ЧАСТОТУ ОБНОВЛЕНИЯ UI
+
             //TODO: рефакторинг и избавление от лишнего кода и повторяющегося
             //TODO: Проверки на удаление папок и файлов 
-            Dispatcher.Invoke(() =>//обновим посчитанное кол-во файлов и размер
+            double size_in_concrete_units = 0;
+            string units_name = "";
+            Get_folder_size_and_measure_units(out units_name, size_folder_in_byte, out size_in_concrete_units);
+            Dispatcher.Invoke(() =>
             {
                 data_grid_files_meta_data.Items.Clear();
-
                 data_grid_files_meta_data.Items.Add(new { Name = "Количество файлов ", Value = files_counter });
-                if (size_folder_in_byte >> 10 > 0)//значит файл весит хотя бы 1 кб
-                {
-                    if (size_folder_in_byte >> 20 > 0)//значит размер файла весит хотя бы 1 МБ
-                    {
-                        if (size_folder_in_byte >> 30 > 0)//значит размер файла весит хотя бы 1 ГБ
-                        {
-                            double size_in_GB = (double)size_folder_in_byte / (1024 * 1024 * 1024);
-                            size_in_GB = Math.Round(size_in_GB, 2);
-                            data_grid_files_meta_data.Items.Add(new { Name = "Размер (Гб)", Value = size_in_GB });
+                data_grid_files_meta_data.Items.Add(new { Name = units_name, Value = size_in_concrete_units });
+            }, DispatcherPriority.Background);
 
-                        }
-                        else//Выводим в мегабайтах
-                        {
-                            double size_in_MB = (double)size_folder_in_byte / (1024 * 1024);
-                            size_in_MB = Math.Round(size_in_MB, 2);
-                            data_grid_files_meta_data.Items.Add(new { Name = "Размер (Мб)", Value = size_in_MB });
-                        }
-                    }
-                    else//выводим в КБ
-                    {
-                        double size_in_KB = (double)size_folder_in_byte / 1024;
-                        size_in_KB = Math.Round(size_in_KB, 2);
-                        data_grid_files_meta_data.Items.Add(new { Name = "Размер (Кб)", Value = size_in_KB });
-                    }
-
-                }
-                else//размер файла меньше 1 кб
-                {
-                    data_grid_files_meta_data.Items.Add(new { Name = "Размер (байт)", Value = size_folder_in_byte });
-                }
-            });
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

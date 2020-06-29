@@ -96,6 +96,26 @@ namespace Wpf_AeroSphere_test_task
         }
         private List<string> GetAllFiles()//возвращает список всех папок и файлов НЕ скрытых
         {
+            if (Directory.Exists(currentDirName))
+            {
+                //все хорошо
+            }
+            else
+            {
+                while (!Directory.Exists(currentDirName))//поднимемся пока не встретим существующую директорию
+                {
+
+                    if (currentDirName == null)
+                    {
+                        return new List<string>();
+                    }
+                    else
+                    {
+                        currentDirName = Path.GetDirectoryName(currentDirName);
+                    }
+                }
+            }
+            
             var all_files_and_folders = Directory.GetFileSystemEntries(currentDirName);//все файлы и папки 
             List<string> not_hidden_folders_files = new List<string>();//только не скрытые Файлы и папки
 
@@ -108,7 +128,7 @@ namespace Wpf_AeroSphere_test_task
                 }
             }
             return not_hidden_folders_files;
-        }
+        }        
         private async void Get_all_drives(ListView list_view_disks)//получает список всех доступных дисков и устройств динамически обновляя их
         {
             while (true)
@@ -220,7 +240,7 @@ namespace Wpf_AeroSphere_test_task
 
         }
 
-        private void Update_listview_folders(ListView list_view_files)//обновляет список с папками и файлами
+        public void Update_listview_folders(ListView list_view_files)//обновляет список с папками и файлами
         {
             list_view_files.Items.Clear();
             foreach (var file in from filepath in GetAllFiles() select Path.GetFileName(filepath))
