@@ -11,7 +11,7 @@ namespace Wpf_AeroSphere_test_task
     static class PathBuilder//для перехода по директориям и правильного отображения пути в GUI
     {
         private const string divided_symbol = "❯";
-        static public string Get_path(ListView listview_path_parts)
+        static public string Get_path(ListView listview_path_parts)//собирает путь из элементов листбокс
         {
             string full_path = "";
             foreach (var path_part in listview_path_parts.Items)
@@ -23,7 +23,7 @@ namespace Wpf_AeroSphere_test_task
             return full_path;
         }
 
-        static public void Dir_up(ListView listview_path_parts)
+        static public void Dir_up(ListView listview_path_parts)//продвигается вверх по пути в листбокс
         {
             if (listview_path_parts != null && listview_path_parts.Items.Count > 1)
             {
@@ -32,7 +32,7 @@ namespace Wpf_AeroSphere_test_task
             else;//корень мы не удаляем
         }
 
-        static public void Dir_down(ListView listview_path_parts, string folder)
+        static public void Dir_down(ListView listview_path_parts, string folder)//продвигается вниз по пути в листбокс
         {
             if (listview_path_parts != null)
             {

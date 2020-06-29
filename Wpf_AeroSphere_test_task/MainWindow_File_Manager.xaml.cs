@@ -91,20 +91,9 @@ namespace Wpf_AeroSphere_test_task
                 string doc_or_folder_name = file_ico_name.Name;
                 var full_path = Path.Combine(volumes.CurrentDirName, doc_or_folder_name);
 
-                if (Directory.Exists(full_path))
+                if (!string.IsNullOrEmpty(doc_or_folder_name) && Directory.Exists(full_path))
                 {
-                    FileAttributes fileAttr = File.GetAttributes(full_path);
-                    bool isFile;
-                    if ((fileAttr & FileAttributes.Directory) == FileAttributes.Directory)
-                    {
-                        isFile = false;
-                    }
-                    else
-                    {
-                        isFile = true;
-                    }
-
-                    if (!string.IsNullOrEmpty(doc_or_folder_name) && !isFile)
+                    if (Directory.Exists(full_path))
                     {
                         try
                         {
@@ -116,7 +105,17 @@ namespace Wpf_AeroSphere_test_task
                             MessageBox.Show("Вам отказано в доступе к данной папке!");
                         }
                     }
-                    else//значит это файл 
+                    else
+                    {
+                        volumes.Update_listview_folders(list_view_files);
+                        MessageBox.Show($"Директория не существует по пути {full_path}!");
+                    }
+
+
+                }
+                else//значит это файл 
+                {
+                    if (File.Exists(full_path))
                     {
                         try
                         {
@@ -126,15 +125,15 @@ namespace Wpf_AeroSphere_test_task
                         {
                             Process.Start(new ProcessStartInfo { FileName = "explorer.exe", Arguments = full_path });//вызовем открыть с помощью и пусть пользователь выберет
                         }
-
                     }
-                }
-                else
-                {
-                    volumes.Update_listview_folders(list_view_files);
-                    MessageBox.Show($"Файл был удален по пути {full_path}!");
-                }
+                    else
+                    {
+                        volumes.Update_listview_folders(list_view_files);
+                        MessageBox.Show($"Файл не существует по пути {full_path}!");
+                    }
 
+
+                }
 
             }
             else;//элемент не выбран или его нет
@@ -190,19 +189,14 @@ namespace Wpf_AeroSphere_test_task
 
                 if (Previos_file_name != file_ico_name.Name)
                 {
+                    if (thread_get_metadata_of_folders_files != null)
+                    {
+                        thread_get_metadata_of_folders_files.Abort();
+                    }                    
+                    else;//поток еще ни разу не был создан и вызван
+
                     if ((fileinfo.Attributes & FileAttributes.Directory) == FileAttributes.Directory)
                     {
-
-                        if (thread_get_metadata_of_folders_files != null)
-                        {
-                            thread_get_metadata_of_folders_files.Abort();
-                            while (thread_get_metadata_of_folders_files.IsAlive)
-                            {
-                                //подождем пока поток остановится
-                            }
-                        }
-                        else;//поток еще ни разу не был создан и вызван
-
                         data_grid_files_meta_data.Items.Clear();
                         //обнулим счетчики и вызовем поток для новой выбранной папки
                         files_counter = 0;
@@ -394,9 +388,9 @@ namespace Wpf_AeroSphere_test_task
             {
                 thread_get_metadata_of_folders_files.Abort();
             }
-            else;//не был создан
+            else;//не был создан            
             var list_paths = (ListView)sender;
-            volumes.Directory_Back_Move_to(list_paths, list_view_files, list_paths.SelectedIndex);
+            volumes.Directory_move_to_folder(list_paths, list_view_files, list_paths.SelectedIndex);
         }
     }
 }

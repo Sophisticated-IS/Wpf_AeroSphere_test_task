@@ -65,10 +65,18 @@ namespace Wpf_AeroSphere_test_task
             else;//мы итак в директории выборе диска находимся
         }
 
-        public void Directory_down(ListView list_view_folders, ListView list_view_path_frames, string currentDirName)//переход внутрь катлога
+        public void Directory_down(ListView list_view_folders, ListView list_view_path_frames, string new_dir_down)//переход внутрь катлога
         {
-            this.currentDirName = currentDirName;
-            PathBuilder.Dir_down(list_view_path_frames, Path.GetFileName(currentDirName));
+            if (Directory.Exists(new_dir_down))
+            {
+                currentDirName = new_dir_down;
+                PathBuilder.Dir_down(list_view_path_frames, Path.GetFileName(new_dir_down));
+
+            }
+            else
+            {
+                MessageBox.Show($"Директории  не сущетсвует по пути {new_dir_down}");
+            }
             Update_listview_folders(list_view_folders);
         }
 
@@ -77,22 +85,57 @@ namespace Wpf_AeroSphere_test_task
             if (currentDirName != null && currentDirName != choosen_disk)
             {
                 PathBuilder.Dir_up(list_view_path_frames);//поднимемся по директории
-                currentDirName = PathBuilder.Get_path(list_view_path_frames);//установим новую
+                var full_path_up = PathBuilder.Get_path(list_view_path_frames);
+                if (Directory.Exists(full_path_up))
+                {
+                    currentDirName = full_path_up;//установим новую                   
+                }
+                else
+                {
+                    Exit_to_existing_dir(list_view_path_frames);
+                }
                 Update_listview_folders(list_view_folders);
+
             }
             else; //мы уже итак в этой директории
 
         }
 
-        public void Directory_Back_Move_to(ListView list_paths,ListView list_files, int selectedIndex)//возвращаемся к конкретной папке
+        public void Directory_move_to_folder(ListView list_paths, ListView list_files, int selectedIndex)//возвращаемся к конкретной папке
         {
-            while (list_paths.Items.Count-1!= selectedIndex)
+            if (selectedIndex >= 0)
             {
-                PathBuilder.Dir_up(list_paths);//поднимемся по директории
-            }
-            currentDirName = PathBuilder.Get_path(list_paths);//установим новую
-            Update_listview_folders(list_files);
+                while (list_paths.Items.Count - 1 != selectedIndex)
+                {
+                    PathBuilder.Dir_up(list_paths);//поднимемся по директории
+                }
+                var new_path = PathBuilder.Get_path(list_paths);
 
+                if (Directory.Exists(new_path))
+                {
+                    currentDirName = new_path;//установим новую
+                }
+                else
+                {
+                    Exit_to_existing_dir(list_paths);
+                }
+                Update_listview_folders(list_files);
+
+            }
+            else
+            {
+                throw new Exception("Индекс не может быть меньше нуля!");
+            }
+
+        }
+        private void Exit_to_existing_dir(ListView list_paths)
+        {
+            Get_all_files();//дойдем до существующей папки
+            while (PathBuilder.Get_path(list_paths) != currentDirName)
+            {
+                PathBuilder.Dir_up(list_paths);
+            }
+            MessageBox.Show("Часть пути была удалена, так как папки в которых вы находились были удалены!");
         }
         private List<string> Get_all_files()//возвращает список всех папок и файлов НЕ скрытых
         {
@@ -115,7 +158,7 @@ namespace Wpf_AeroSphere_test_task
                     }
                 }
             }
-            
+
             var all_files_and_folders = Directory.GetFileSystemEntries(currentDirName);//все файлы и папки 
             List<string> not_hidden_folders_files = new List<string>();//только не скрытые Файлы и папки
 
@@ -128,7 +171,7 @@ namespace Wpf_AeroSphere_test_task
                 }
             }
             return not_hidden_folders_files;
-        }        
+        }
         private async void Get_all_drives(ListView list_view_disks)//получает список всех доступных дисков и устройств динамически обновляя их
         {
             while (true)

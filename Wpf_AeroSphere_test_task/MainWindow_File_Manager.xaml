@@ -37,12 +37,12 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0" Background="#FFFFDBA1">
-            <DockPanel LastChildFill="True">
+            <DockPanel LastChildFill="True" >
                 <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
-                    <Button Style="{StaticResource Button_Arrows_Style}" ToolTip="Вернуться на директорию назад" FontSize="25" Click="Left_arrow_Button_Click">
+                    <Button Style="{StaticResource Button_Arrows_Style}"  ToolTip="Вернуться на директорию назад" FontSize="25" Click="Left_arrow_Button_Click">
                         🡄
                     </Button>
-                    <Button Style="{StaticResource Button_Arrows_Style}" FontSize="25" ToolTip="Вернуться к выбору диска" 
+                    <Button Style="{StaticResource Button_Arrows_Style}" FontSize="25"  ToolTip="Вернуться к выбору диска" 
                             FontWeight="Black"  Click="Return_to_disk_choosing_Button_Click" >
                         <Button.Foreground>
                             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -55,7 +55,7 @@
                 </StackPanel>
 
                 <TextBox  DockPanel.Dock="Right" FontSize="14" Foreground="Gray"  HorizontalAlignment="Right" Width="150" Margin="2" GotFocus="Search_TextBox_GotFocus" 
-                          LostFocus="Search_TextBox_LostFocus" TextChanged="Search_TextBox_TextChanged">Search: 🔎</TextBox>
+                          LostFocus="Search_TextBox_LostFocus" TextChanged="Search_TextBox_TextChanged" >Search: 🔎</TextBox>
 
                 <Grid Margin="5,0,5,0">
                     <Grid.ColumnDefinitions>
@@ -65,21 +65,11 @@
 
                     <Grid Grid.Column="0" Background="#BF8930">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Style="{StaticResource BigFont_TextBlock_Style}" Padding="0,8,0,0" >
-                                <TextBlock.Background>
-                                    <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                                        <GradientStop Color="#FFFF8B00" Offset="0.414"/>
-                                        <GradientStop Color="#FFFFEFA1" Offset="0.873"/>
-                                        <GradientStop Color="#FFFFEFA1" Offset="0.438"/>
-                                    </LinearGradientBrush>
-                                </TextBlock.Background>                  
-                            Path: 📁  <Run Foreground="Gray"> ❯ </Run>
-                            </TextBlock>
-                            <TextBox  BorderThickness="0" Background="AliceBlue" HorizontalAlignment="Stretch" Style="{StaticResource BigFont_TextBlock_Style}" FontSize="18" Padding="0,8,0,0" FontStyle="Italic" 
+                            <TextBox Style="{StaticResource BigFont_TextBlock_Style}" Padding="0,8,0,0"  BorderThickness="0" Background="#FFFFDBA1" Text=" Path: 📁   ❯ "/>
+                            
+                            <TextBox   Background="#FFFFDBA1"  BorderThickness="0" HorizontalAlignment="Stretch" Style="{StaticResource BigFont_TextBlock_Style}" FontSize="18" Padding="0,8,0,0" FontStyle="Italic" 
                                       IsReadOnly="True" Text="💻MyComputer"/>
                         </StackPanel>
-                     
-                        
                     </Grid>
 
                     <Grid Grid.Column="1">
@@ -120,11 +110,11 @@
             <Grid Grid.Column="0">
                 <GroupBox Name="group_box_drives" Header="All available Drives" Style="{StaticResource BigFont_TextBlock_Style}">
                     <ListView Name="list_view_disks" SelectionMode="Single" MouseDoubleClick="List_view_disks_MouseDoubleClick"  
-                                                   Background="Bisque" MouseLeftButtonUp="List_view_disks_MouseLeftButtonUp">
+                                                   Background="White" MouseLeftButtonUp="List_view_disks_MouseLeftButtonUp">
                         <ListView.ItemTemplate>
                             <DataTemplate>
 
-                                <StackPanel Orientation="Vertical" Margin="5" >
+                                <StackPanel Orientation="Vertical" Margin="5"  Background="Bisque" >
                                     <StackPanel Orientation="Horizontal" >
                                         <Image HorizontalAlignment="Left" MaxHeight="50" MaxWidth="50" Source="{Binding Img}"/>
                                         <TextBlock Text="{Binding VolumeLabel}" Style="{StaticResource BigFont_TextBlock_Style}" Margin="0,0,5,0"/>
@@ -142,13 +132,19 @@
                                         </ProgressBar.RenderTransform>
                                     </ProgressBar>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock xml:space="preserve" Text="{Binding AvailableFreeSpace}" Style="{StaticResource TextBlock_Low_Font_info}">Gb is free from </TextBlock>
+                                        <TextBlock xml:space="preserve" Text="{Binding AvailableFreeSpace}" Style="{StaticResource TextBlock_Low_Font_info}">Gb is free from</TextBlock>
                                         <TextBlock xml:space="preserve" Text="{Binding TotalSize}" Style="{StaticResource TextBlock_Low_Font_info}"> Gb</TextBlock>
                                     </StackPanel>
 
                                 </StackPanel>
                             </DataTemplate>
                         </ListView.ItemTemplate>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                <!--ДЛЯ 100% растяжения-->                                
+                            </Style>
+                        </ListView.ItemContainerStyle>
                     </ListView>
                 </GroupBox>
             </Grid>
@@ -175,7 +171,7 @@
             <Grid Grid.Column="0">
 
                 <GroupBox Name="group_box_files" Header="Files and Folders" Style="{StaticResource BigFont_TextBlock_Style}">
-                    <ListView x:Name="list_view_files" Background="Bisque" Style="{StaticResource BigFont_TextBlock_Style}" 
+                    <ListView x:Name="list_view_files" Background="White" Style="{StaticResource BigFont_TextBlock_Style}" 
                           MouseDoubleClick="List_view_files_MouseDoubleClick" MouseLeftButtonUp="List_view_files_MouseLeftButtonUp">
                         <ListView.ItemTemplate>
                             <DataTemplate>
@@ -187,7 +183,6 @@
                         </ListView.ItemTemplate>
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
-                                <!--<Setter Property="HorizontalContentAlignment" Value="Stretch" />--> <!--ДЛЯ 100% растяжения-->
                                 <Setter Property="Visibility"  Value="{Binding Visible_mode,Mode=OneWay}"/>
                             </Style>
                         </ListView.ItemContainerStyle>
