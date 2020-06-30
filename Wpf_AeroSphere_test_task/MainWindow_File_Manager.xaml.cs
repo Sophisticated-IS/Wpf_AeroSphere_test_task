@@ -32,7 +32,7 @@ namespace Wpf_AeroSphere_test_task
         public MainWindow()
         {
             InitializeComponent();
-            volumes = Drives_list.get_instance(list_view_disks);//экземпляр нашей файловой системы  
+            volumes = Drives_list.Get_instance(list_view_disks);//экземпляр нашей файловой системы  
             Check_current_drive_is_online(); //метод проверяющий включен ли драйвер
         }
 
@@ -80,7 +80,6 @@ namespace Wpf_AeroSphere_test_task
                 }
             }
         }
-
 
         private void List_view_files_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -194,7 +193,6 @@ namespace Wpf_AeroSphere_test_task
                     if (thread_get_metadata_of_folders_files != null)
                     {
                         thread_get_metadata_of_folders_files.Abort();
-
                     }
                     else;//поток еще ни разу не был создан и вызван
 

@@ -1,0 +1,16 @@
+C:\Users\Sova IS\source\repos\Wpf_AeroSphere_test_task\Wpf_AeroSphere_test_task.Tests\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
+C:\Users\Sova IS\source\repos\Wpf_AeroSphere_test_task\Wpf_AeroSphere_test_task.Tests\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
+C:\Users\Sova IS\source\repos\Wpf_AeroSphere_test_task\Wpf_AeroSphere_test_task.Tests\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll
+C:\Users\Sova IS\source\repos\Wpf_AeroSphere_test_task\Wpf_AeroSphere_test_task.Tests\bin\Debug\Wpf_AeroSphere_test_task.Tests.dll
+C:\Users\Sova IS\source\repos\Wpf_AeroSphere_test_task\Wpf_AeroSphere_test_task.Tests\bin\Debug\Wpf_AeroSphere_test_task.Tests.pdb
+C:\Users\Sova IS\source\repos\Wpf_AeroSphere_test_task\Wpf_AeroSphere_test_task.Tests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.dll
+C:\Users\Sova IS\source\repos\Wpf_AeroSphere_test_task\Wpf_AeroSphere_test_task.Tests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll
+C:\Users\Sova IS\source\repos\Wpf_AeroSphere_test_task\Wpf_AeroSphere_test_task.Tests\bin\Debug\Wpf_AeroSphere_test_task.exe
+C:\Users\Sova IS\source\repos\Wpf_AeroSphere_test_task\Wpf_AeroSphere_test_task.Tests\bin\Debug\Wpf_AeroSphere_test_task.pdb
+C:\Users\Sova IS\source\repos\Wpf_AeroSphere_test_task\Wpf_AeroSphere_test_task.Tests\bin\Debug\Wpf_AeroSphere_test_task.exe.config
+C:\Users\Sova IS\source\repos\Wpf_AeroSphere_test_task\Wpf_AeroSphere_test_task.Tests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.xml
+C:\Users\Sova IS\source\repos\Wpf_AeroSphere_test_task\Wpf_AeroSphere_test_task.Tests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
+C:\Users\Sova IS\source\repos\Wpf_AeroSphere_test_task\Wpf_AeroSphere_test_task.Tests\obj\Debug\Wpf_AeroSphere_test_task.Tests.csprojAssemblyReference.cache
+C:\Users\Sova IS\source\repos\Wpf_AeroSphere_test_task\Wpf_AeroSphere_test_task.Tests\obj\Debug\Wpf_AeroSphere_test_task.Tests.csproj.CopyComplete
+C:\Users\Sova IS\source\repos\Wpf_AeroSphere_test_task\Wpf_AeroSphere_test_task.Tests\obj\Debug\Wpf_AeroSphere_test_task.Tests.dll
+C:\Users\Sova IS\source\repos\Wpf_AeroSphere_test_task\Wpf_AeroSphere_test_task.Tests\obj\Debug\Wpf_AeroSphere_test_task.Tests.pdb

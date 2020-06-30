@@ -25,7 +25,7 @@ namespace Wpf_AeroSphere_test_task
         {
             Get_all_drives(list_view_devices);
         }
-        public static Drives_list get_instance(ListView list_view_devices)//реализация сиглтон паттерна
+        public static Drives_list Get_instance(ListView list_view_devices)//реализация сиглтон паттерна
         {
             if (instance == null)
             {

@@ -8,7 +8,7 @@ using System.Windows.Controls;
 
 namespace Wpf_AeroSphere_test_task
 {
-    static class PathBuilder//для перехода по директориям и правильного отображения пути в GUI
+    public static class PathBuilder//для перехода по директориям и правильного отображения пути в GUI
     {
         private const string divided_symbol = "❯";
         static public string Get_path(ListView listview_path_parts)//собирает путь из элементов листбокс
