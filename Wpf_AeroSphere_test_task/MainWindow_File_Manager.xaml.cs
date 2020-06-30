@@ -32,7 +32,7 @@ namespace Wpf_AeroSphere_test_task
         public MainWindow()
         {
             InitializeComponent();
-            volumes = new Drives_list(list_view_disks);//экземпляр нашей файловой системы  
+            volumes = Drives_list.get_instance(list_view_disks);//экземпляр нашей файловой системы  
             Check_current_drive_is_online(); //метод проверяющий включен ли драйвер
         }
 
@@ -321,8 +321,6 @@ namespace Wpf_AeroSphere_test_task
                 data_grid_files_meta_data.Items.Add(new { Name = "Количество файлов ", Value = files_counter });
                 data_grid_files_meta_data.Items.Add(new { Name = units_name, Value = size_in_concrete_units });
             }, DispatcherPriority.Background);
-
-
 
         }
 

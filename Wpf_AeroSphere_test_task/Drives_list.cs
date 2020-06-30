@@ -19,9 +19,19 @@ namespace Wpf_AeroSphere_test_task
             public DriveInfo drive_info;//информация о носителе
         }
 
-        public Drives_list(ListView list_view_devices)
+        private static Drives_list instance;
+        
+        private Drives_list(ListView list_view_devices)
         {
             Get_all_drives(list_view_devices);
+        }
+        public static Drives_list get_instance(ListView list_view_devices)//реализация сиглтон паттерна
+        {
+            if (instance == null)
+            {
+                instance = new Drives_list(list_view_devices);
+            }
+            return instance;
         }
         private string currentDirName;//имя текущей директории
         private string choosen_disk;//имя выбранного диска
